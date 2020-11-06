@@ -12,6 +12,7 @@ using For_Realty.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Globalization;
 
 namespace For_Realty
 {
@@ -27,13 +28,28 @@ namespace For_Realty
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
             services.AddDbContext<For_RealtyDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ForRealtyConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<For_RealtyDbContext>();
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddEntityFrameworkStores<For_RealtyDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequiredLength = 8;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(24);
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +66,12 @@ namespace For_Realty
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // Set Default Culture to replace dot with comma as decimal marker.
+            CultureInfo cultureInfoDutchBelgium = new CultureInfo("nl-BE");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfoDutchBelgium;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfoDutchBelgium;
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

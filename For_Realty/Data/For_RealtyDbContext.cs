@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using For_Realty.Areas.Identity.Data;
 using For_Realty.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace For_Realty.Data
 {
-    public class For_RealtyDbContext : IdentityDbContext
+    public class For_RealtyDbContext : IdentityDbContext<IdentityUser>
     {
         public For_RealtyDbContext(DbContextOptions<For_RealtyDbContext> options)
             : base(options)
@@ -29,6 +31,8 @@ namespace For_Realty.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             OnModelCreatingAd(builder);
             OnModelCreatingAgency(builder);
             OnModelCreatingEnergyClass(builder);
