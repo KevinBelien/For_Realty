@@ -1,0 +1,83 @@
+﻿@model IEnumerable<For_Realty.Models.Ad>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateInit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Requirements)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Radius)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserAccount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Town)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RealEstateType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RealEstateSubtype)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RealEstateStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateInit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Requirements)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Radius)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserAccount.Givenname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Town.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RealEstateType.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RealEstateSubtype.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RealEstateStatus.Status)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AdID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AdID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AdID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
