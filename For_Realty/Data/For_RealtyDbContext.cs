@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace For_Realty.Data
 {
-    public class For_RealtyDbContext : IdentityDbContext<IdentityUser>
+    public class For_RealtyDbContext : IdentityDbContext<AccountUser>
     {
         public For_RealtyDbContext(DbContextOptions<For_RealtyDbContext> options)
             : base(options)
@@ -45,6 +45,7 @@ namespace For_Realty.Data
             OnModelCreatingRealEstateType(builder);
             OnModelCreatingTown(builder);
             OnModelCreatingUserAccount(builder);
+            OnModelCreatingForeignKeyAccount(builder);
         }
 
         private void OnModelCreatingAgency(ModelBuilder builder)
@@ -142,13 +143,20 @@ namespace For_Realty.Data
         private void OnModelCreatingUserAccount(ModelBuilder builder)
         {
             builder.Entity<UserAccount>().ToTable("UserAccount");
-            builder.Entity<UserAccount>().Property(u => u.Mail).IsRequired();
             builder.Entity<UserAccount>().Property(u => u.Givenname).IsRequired();
             builder.Entity<UserAccount>().Property(u => u.Surname).IsRequired();
             builder.Entity<UserAccount>().Ignore(u => u.FullName);
-            builder.Entity<UserAccount>().Property(u => u.Password).IsRequired();
             builder.Entity<UserAccount>().Property(u => u.HouseNr).HasMaxLength(10);
             builder.Entity<UserAccount>().Property(u => u.ZIP).HasMaxLength(10);
+        }
+
+        private void OnModelCreatingForeignKeyAccount(ModelBuilder builder)
+        {
+            builder.Entity<AccountUser>()
+                .HasOne(u => u.UserAccount)
+                .WithOne(a => a.AccountUser)
+                .HasForeignKey<UserAccount>(u => u.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
