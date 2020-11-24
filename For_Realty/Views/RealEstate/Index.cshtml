@@ -1,0 +1,229 @@
+﻿@model IEnumerable<For_Realty.Models.RealEstate>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmountBathrooms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmountBedrooms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmountToilets)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConstructionYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmountFacades)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasParkingFacility)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LivingArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AreaKitchen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasDressing)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsIsolated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasTerrace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasGarden)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AreaSpace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescriptionTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HouseNr)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Street)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsFloodArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmountOfFloors)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FloorLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasLift)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasAttic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cadastral)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasBuildingPermit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateInit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeatingType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EnergyClass)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RealEstateType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Agency)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RealEstateStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Town)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AmountBathrooms)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AmountBedrooms)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AmountToilets)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConstructionYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AmountFacades)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasParkingFacility)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LivingArea)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AreaKitchen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasDressing)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsIsolated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasTerrace)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasGarden)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AreaSpace)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DescriptionTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HouseNr)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Street)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsFloodArea)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AmountOfFloors)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FloorLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasLift)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasAttic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cadastral)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasBuildingPermit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateInit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HeatingType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EnergyClass.Letter)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RealEstateType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Agency.BIV)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RealEstateStatus.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Town.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RealEstateID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.RealEstateID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RealEstateID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -66,26 +66,28 @@ namespace For_Realty.Data
         private void OnModelCreatingRealEstate(ModelBuilder builder)
         {
             builder.Entity<RealEstate>().ToTable("RealEstate");
+            builder.Entity<RealEstate>().Property(r => r.Code).IsRequired().HasMaxLength(15);
             builder.Entity<RealEstate>().HasAlternateKey(r => r.Code)
-                .HasName("AK_RealEstate");
+                .HasName("AK_RealEstate_Code");
             builder.Entity<RealEstate>().Property(r => r.DescriptionTitle).HasMaxLength(100)
                 .IsRequired();
             builder.Entity<RealEstate>().Property(r => r.HouseNr).HasMaxLength(10)
-                .IsRequired();
-            builder.Entity<RealEstate>().Property(r => r.Code).IsRequired();
+                .IsRequired();    
             builder.Entity<RealEstate>().Property(r => r.AreaSpace).IsRequired();
             builder.Entity<RealEstate>().Property(r => r.Description).IsRequired();
             builder.Entity<RealEstate>().Property(r => r.Street).IsRequired();
-            builder.Entity<RealEstate>().Property(r => r.Price).IsRequired();
+            builder.Entity<RealEstate>().Property(r => r.Price).HasColumnType("decimal(10, 2)").IsRequired();
             builder.Entity<RealEstate>().Property(r => r.IsFloodArea).IsRequired();
-            builder.Entity<RealEstate>().Property(r => r.Cadastral).IsRequired();
+            builder.Entity<RealEstate>().Property(r => r.Cadastral).HasColumnType("decimal(8, 2)");
+            builder.Entity<RealEstate>().Property(r => r.DateInit).IsRequired();
+
         }
 
         private void OnModelCreatingAd(ModelBuilder builder)
         {
             builder.Entity<Ad>().ToTable("Ad");
             builder.Entity<Ad>().Property(a => a.DateInit).IsRequired();
-            builder.Entity<Ad>().Property(a => a.Price).IsRequired();
+            builder.Entity<Ad>().Property(a => a.Price).HasColumnType("decimal(10, 2)").IsRequired();
             builder.Entity<Ad>().Property(a => a.Radius).IsRequired();
         }
         private void OnModelCreatingEnergyClass(ModelBuilder builder)

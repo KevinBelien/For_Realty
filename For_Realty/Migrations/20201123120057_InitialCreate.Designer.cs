@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace For_Realty.Migrations
 {
     [DbContext(typeof(For_RealtyDbContext))]
-    [Migration("20201118150241_RemovePhoneAndMailFromUserAccount")]
-    partial class RemovePhoneAndMailFromUserAccount
+    [Migration("20201123120057_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -97,7 +97,7 @@ namespace For_Realty.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<int>("Radius")
                         .HasColumnType("int");
@@ -276,14 +276,19 @@ namespace For_Realty.Migrations
                     b.Property<int>("AreaSpace")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Cadastral")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<decimal?>("Cadastral")
+                        .HasColumnType("decimal(8, 2)");
 
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
 
                     b.Property<int?>("ConstructionYear")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DateInit")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -339,7 +344,7 @@ namespace For_Realty.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<int>("RealEstateStatusID")
                         .HasColumnType("int");
@@ -360,7 +365,7 @@ namespace For_Realty.Migrations
                     b.HasKey("RealEstateID");
 
                     b.HasAlternateKey("Code")
-                        .HasName("AK_RealEstate");
+                        .HasName("AK_RealEstate_Code");
 
                     b.HasIndex("AgencyID");
 
@@ -763,7 +768,8 @@ namespace For_Realty.Migrations
                 {
                     b.HasOne("For_Realty.Areas.Identity.Data.AccountUser", "AccountUser")
                         .WithOne("UserAccount")
-                        .HasForeignKey("For_Realty.Models.UserAccount", "UserID");
+                        .HasForeignKey("For_Realty.Models.UserAccount", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

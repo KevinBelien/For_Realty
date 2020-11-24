@@ -36,7 +36,7 @@ namespace For_Realty.Areas.Identity.Pages.Account.Manage
         {
             [Required]
             [DataType(DataType.Password)]
-            [Display(Name = "Oude Wachtwoord")]
+            [Display(Name = "Oud Wachtwoord")]
             public string OldPassword { get; set; }
 
             [Required]
@@ -46,7 +46,7 @@ namespace For_Realty.Areas.Identity.Pages.Account.Manage
             public string NewPassword { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Bevestig nieuwe wachtwoord")]
+            [Display(Name = "Bevestig nieuw wachtwoord")]
             [Compare("NewPassword", ErrorMessage = "De wachtwoorden komen niet overeen.")]
             public string ConfirmPassword { get; set; }
         }

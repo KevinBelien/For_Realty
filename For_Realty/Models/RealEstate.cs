@@ -9,7 +9,7 @@ namespace For_Realty.Models
     public class RealEstate
     {
         public int RealEstateID { get; set; }
-        public int Code { get; set; }
+        public string Code { get; set; }
         public int? AmountBathrooms { get; set; }
         public int? AmountBedrooms { get; set; }
         public int? AmountToilets { get; set; }
@@ -33,8 +33,10 @@ namespace For_Realty.Models
         public int? FloorLevel { get; set; }
         public bool? HasLift { get; set; }
         public bool? HasAttic { get; set; }
-        public Decimal Cadastral { get; set; }
+        public Decimal? Cadastral { get; set; }
         public bool? HasBuildingPermit { get; set; }
+
+        public DateTime DateInit { get; set; }
 
         public int? HeatingTypeID { get; set; }
         public HeatingType HeatingType { get; set; }
