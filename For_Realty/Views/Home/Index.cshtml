@@ -1,8 +1,171 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model For_Realty.ViewModels.ListRealEstateViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{ ViewData["Title"] = "Home Page"; }
+
+<h1 class="mt-5 mb-4 text-center">De plek voor aankoop van vastgoed</h1>
+<form id="indexForm" asp-controller="RealEstate" asp-action="Search" method="get">
+    <div class="form-actions no-color searchbox">
+        <div class="d-flex flex-row justify-content-center mb-3">
+            @foreach (var status in Model.RealEstateStatus)
+            {
+                @if (status.RealEstateStatusID == 1)
+                {
+                    <label class="radio">
+                        <input name="status" type="radio" asp-for="RealEstateStatus"
+                               value="@status.Status" id="RealEstateStatus@(status.Status)" checked />
+                        <span>@status.Status</span>
+                    </label>
+                }
+                else
+                {
+                    <label class="radio">
+                        <input name="status" type="radio" asp-for="RealEstateStatus"
+                               value="@status.Status" id="RealEstateStatus@(status.Status)" />
+                        <span>@status.Status</span>
+                    </label>
+                }
+            }
+        </div>
+        <div class="input-group d-flex flex-row justify-content-center">
+            <input type="text" placeholder="Zoek op gemeente" asp-for="Town" class="inputbox" />
+            <div class="input-group-append">
+                <input type="submit" asp-controller="Home" asp-action="Index" value="Zoeken" class="btn btn-primary btn-submit" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<h2 class="mt-5 mb-3 head-title-index">Nieuw te koop!</h2>
+
+<div class="row">
+    @foreach (var estate in Model.RealEstatesBuy)
+    {
+        <div class="col-lg-4 col-sm-6 col-12 mb-5 mt-3">
+            <div class="d-flex justify-content-center">
+                <div class="card">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text">
+                        <div>
+                            <img src="@(estate.RealEstatePictures.Where(re => re.Title == "Front").SingleOrDefault().FileName)"
+                                 class="card-img-top card-img-index" alt="picture of estate witch code @(estate.Code)" />
+                            <div class="card-img-overlay">
+                                <div class="card-text text-right card-date">
+                                    @if ((Math.Floor((Model.LocalDate - estate.DateInit).TotalDays).ToString()) != "0")
+                                    {
+                                        <span>@(Math.Floor((Model.LocalDate - estate.DateInit).TotalDays).ToString())d geleden toegevoegd</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Vandaag toegevoegd</span>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-body text-left">
+                            <div class="row mb-0 pt-0 mb-2">
+                                <div class="col-12">
+                                    <p class="card-title">@(estate.RealEstateType.Name)</p>
+                                </div>
+
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-6">
+                                    <p class="card-text">@(estate.RealEstateStatus.Status)</p>
+                                </div>
+                                @if (estate.AmountBedrooms != null)
+                                {
+                                    <div class="col-6">
+                                        <p class="card-text text-right">@(estate.AmountBedrooms.ToString())&nbsp;slpks</p>
+                                    </div>
+                                }
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-6">
+                                    <p class="card-text">@(estate.Town.Name) - @(estate.Town.ZIP) </p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text text-right">@(estate.AreaSpace.ToString())&nbsp;m²</p>
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-6">
+                                    <p class="card-text">@(estate.Street)&nbsp;@(estate.HouseNr)</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text text-right text-price">&euro; @(estate.Price.ToString("N0"))&nbsp;</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+<h2 class="mt-4 mb-3 head-title-index">Nieuw te huur!</h2>
+
+<div class="row">
+    @foreach (var estate in Model.RealEstatesHire)
+    {
+        <div class="col-lg-4 col-sm-6 col-12 mb-5 mt-3">
+            <div class="d-flex justify-content-center">
+                <div class="card">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text">
+                        <div>
+                            <img src="@(estate.RealEstatePictures.Where(re => re.Title == "Front").SingleOrDefault().FileName)"
+                                 class="card-img-top card-img-index" alt="picture of estate witch code @(estate.Code)" />
+                            <div class="card-img-overlay">
+                                <div class="card-text text-right card-date">
+                                    @if ((Math.Floor((Model.LocalDate - estate.DateInit).TotalDays).ToString()) != "0")
+                                    {
+                                        <span>@(Math.Floor((Model.LocalDate - estate.DateInit).TotalDays).ToString())d geleden toegevoegd</span> }
+                                    else
+                                    {
+                                        <span>Vandaag toegevoegd</span>}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-body text-left">
+                            <div class="row mb-0 pt-0 mb-2">
+                                <div class="col-12">
+                                    <p class="card-title">@(estate.RealEstateType.Name)</p>
+                                </div>
+
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-6">
+                                    <p class="card-text">@(estate.RealEstateStatus.Status)</p>
+                                </div>
+                                @if (estate.AmountBedrooms != null)
+                                {
+                                    <div class="col-6">
+                                        <p class="card-text text-right">@(estate.AmountBedrooms.ToString())&nbsp;slpks</p>
+                                    </div>
+                                }
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-6">
+                                    <p class="card-text">@(estate.Town.Name) - @(estate.Town.ZIP) </p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text text-right">@(estate.AreaSpace.ToString())&nbsp;m²</p>
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-6">
+                                    <p class="card-text">@(estate.Street)&nbsp;@(estate.HouseNr)</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text text-right text-price">&euro; @(estate.Price.ToString("N0"))&nbsp;</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
