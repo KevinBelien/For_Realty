@@ -3,6 +3,15 @@ for details on configuring this project to bundle and minify static web assets. 
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Nunito:wght@400;600;800&family=Open+Sans&family=Roboto&display=swap');
 
+/*@media (min-width: 576px) and (max-width: 767px){
+    h2.head-title-index::before {
+        left: 50%;
+        margin-left: -20px;
+    }
+}*/
+
+
+
 /* Provide sufficient contrast against white background */
 a {
     color: #0366d6;
@@ -95,7 +104,7 @@ a.navbar-brand {
 }
 
 .nav-item {
-    margin-left: 2em;
+    margin-left: 1.8em;
     font-size: 1.1em;
 }
 
@@ -122,7 +131,7 @@ h2 {
             height: 3px;
             background-color: #1E8194;
             width: 50px;
-            bottom: -6px;
+            bottom: -8px;
         }
 
 .searchbox {
@@ -212,5 +221,9 @@ label.radio {
 
 .card-link:hover {
     box-shadow: 0 2px 9px rgba(0,18,39,.2);
+}
+
+.card{
+    max-width:400px;
 }
 

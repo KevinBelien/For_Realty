@@ -35,12 +35,12 @@
     </div>
 </form>
 
-<h2 class="mt-5 mb-3 head-title-index">Nieuw te koop!</h2>
+<h2 class="mt-5 mb-4 head-title-index text-sm-center text-md-left">Nieuw te koop!</h2>
 
-<div class="row">
+<div class="row mt-5">
     @foreach (var estate in Model.RealEstatesBuy)
     {
-        <div class="col-lg-4 col-sm-6 col-12 mb-5 mt-3">
+        <div class="col-lg-4 col-md-6 col-12 mb-5 mt-3">
             <div class="d-flex justify-content-center">
                 <div class="card">
                     <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text card-link">
@@ -103,12 +103,12 @@
     }
 </div>
 
-<h2 class="mt-4 mb-3 head-title-index">Nieuw te huur!</h2>
+<h2 class="mt-4 mb-4 head-title-index text-sm-center text-md-left">Nieuw te huur!</h2>
 
-<div class="row">
+<div class="row mt-5">
     @foreach (var estate in Model.RealEstatesHire)
     {
-        <div class="col-lg-4 col-sm-6 col-12 mb-5 mt-3">
+        <div class="col-lg-4 col-md-6 col-12 mb-5 mt-3">
             <div class="d-flex justify-content-center">
                 <div class="card">
                     <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text card-link">
