@@ -252,21 +252,17 @@ namespace For_Realty.Migrations
                     ZIP = table.Column<string>(maxLength: 10, nullable: true),
                     Street = table.Column<string>(nullable: true),
                     HouseNr = table.Column<string>(maxLength: 10, nullable: true),
-                    Mail = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false),
-                    Phone = table.Column<string>(nullable: true),
-                    UserID = table.Column<string>(nullable: true),
-                    AccountUserId = table.Column<string>(nullable: true)
+                    UserID = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserAccount", x => x.UserAccountID);
                     table.ForeignKey(
-                        name: "FK_UserAccount_AspNetUsers_AccountUserId",
-                        column: x => x.AccountUserId,
+                        name: "FK_UserAccount_AspNetUsers_UserID",
+                        column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -297,7 +293,7 @@ namespace For_Realty.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateInit = table.Column<DateTime>(nullable: false),
                     Requirements = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
                     Radius = table.Column<int>(nullable: false),
                     UserAccountID = table.Column<int>(nullable: false),
                     TownID = table.Column<int>(nullable: false),
@@ -346,7 +342,7 @@ namespace For_Realty.Migrations
                 {
                     RealEstateID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<int>(nullable: false),
+                    Code = table.Column<string>(maxLength: 15, nullable: false),
                     AmountBathrooms = table.Column<int>(nullable: true),
                     AmountBedrooms = table.Column<int>(nullable: true),
                     AmountToilets = table.Column<int>(nullable: true),
@@ -364,14 +360,15 @@ namespace For_Realty.Migrations
                     Description = table.Column<string>(nullable: false),
                     HouseNr = table.Column<string>(maxLength: 10, nullable: false),
                     Street = table.Column<string>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
                     IsFloodArea = table.Column<bool>(nullable: false),
                     AmountOfFloors = table.Column<int>(nullable: true),
                     FloorLevel = table.Column<int>(nullable: true),
                     HasLift = table.Column<bool>(nullable: true),
                     HasAttic = table.Column<bool>(nullable: true),
-                    Cadastral = table.Column<decimal>(nullable: false),
+                    Cadastral = table.Column<decimal>(type: "decimal(8, 2)", nullable: true),
                     HasBuildingPermit = table.Column<bool>(nullable: true),
+                    DateInit = table.Column<DateTime>(nullable: false),
                     HeatingTypeID = table.Column<int>(nullable: true),
                     EnergyClassID = table.Column<int>(nullable: true),
                     RealEstateTypeID = table.Column<int>(nullable: false),
@@ -383,7 +380,7 @@ namespace For_Realty.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RealEstate", x => x.RealEstateID);
-                    table.UniqueConstraint("AK_RealEstate", x => x.Code);
+                    table.UniqueConstraint("AK_RealEstate_Code", x => x.Code);
                     table.ForeignKey(
                         name: "FK_RealEstate_Agency_AgencyID",
                         column: x => x.AgencyID,
@@ -597,9 +594,11 @@ namespace For_Realty.Migrations
                 column: "RealEstateTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserAccount_AccountUserId",
+                name: "IX_UserAccount_UserID",
                 table: "UserAccount",
-                column: "AccountUserId");
+                column: "UserID",
+                unique: true,
+                filter: "[UserID] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
