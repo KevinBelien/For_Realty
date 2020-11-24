@@ -210,3 +210,7 @@ label.radio {
     font-weight: 600;
 }
 
+.card-link:hover {
+    box-shadow: 0 2px 9px rgba(0,18,39,.2);
+}
+
