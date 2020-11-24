@@ -43,7 +43,7 @@
         <div class="col-lg-4 col-sm-6 col-12 mb-5 mt-3">
             <div class="d-flex justify-content-center">
                 <div class="card">
-                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text card-link">
                         <div>
                             <img src="@(estate.RealEstatePictures.Where(re => re.Title == "Front").SingleOrDefault().FileName)"
                                  class="card-img-top card-img-index" alt="picture of estate witch code @(estate.Code)" />
@@ -75,7 +75,7 @@
                                 @if (estate.AmountBedrooms != null)
                                 {
                                     <div class="col-6">
-                                        <p class="card-text text-right">@(estate.AmountBedrooms.ToString())&nbsp;slpks</p>
+                                        <p class="card-text text-right">@(estate.AmountBedrooms.ToString())&nbsp;slpk</p>
                                     </div>
                                 }
                             </div>
@@ -111,7 +111,7 @@
         <div class="col-lg-4 col-sm-6 col-12 mb-5 mt-3">
             <div class="d-flex justify-content-center">
                 <div class="card">
-                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text card-link">
                         <div>
                             <img src="@(estate.RealEstatePictures.Where(re => re.Title == "Front").SingleOrDefault().FileName)"
                                  class="card-img-top card-img-index" alt="picture of estate witch code @(estate.Code)" />
@@ -141,7 +141,7 @@
                                 @if (estate.AmountBedrooms != null)
                                 {
                                     <div class="col-6">
-                                        <p class="card-text text-right">@(estate.AmountBedrooms.ToString())&nbsp;slpks</p>
+                                        <p class="card-text text-right">@(estate.AmountBedrooms.ToString())&nbsp;slpk</p>
                                     </div>
                                 }
                             </div>
