@@ -4,6 +4,7 @@
 // Write your JavaScript code.
 //Lightbox options
 lightbox.option({
-    'alwaysShowNavOnTouchDevices': true
+    'alwaysShowNavOnTouchDevices': true,
+    'albumLabel': "Afbeelding"
 });
 
