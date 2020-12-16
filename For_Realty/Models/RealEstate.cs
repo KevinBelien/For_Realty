@@ -47,6 +47,9 @@ namespace For_Realty.Models
         public int RealEstateTypeID { get; set; }
         public RealEstateType RealEstateType { get; set; }
 
+        public int RealEstateSubtypeID { get; set; }
+        public RealEstateSubtype RealEstateSubtype { get; set; }
+
         public int AgencyID { get; set; }
         public Agency Agency { get; set; }
 

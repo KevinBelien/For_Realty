@@ -45,7 +45,8 @@ namespace For_Realty.Controllers
                 .Include(re => re.Agency).ThenInclude(a => a.RealEstates)
                 .Include(re => re.EnergyClass)
                 .FirstOrDefaultAsync(r => r.RealEstateID == id);
-
+            //viewModel.EstateSubtype = await _context.RealEstateSubtypes
+            //    .Where(st => st.RealEstateSubtypeID == viewModel.RealEstate.RealEstateType.RealEstateSubtypes)
             //viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.RealEstate.AgencyID).ToListAsync();
 
             if (viewModel.RealEstate == null)
