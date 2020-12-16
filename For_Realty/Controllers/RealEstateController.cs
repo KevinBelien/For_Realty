@@ -42,11 +42,11 @@ namespace For_Realty.Controllers
                 .Include(re => re.RealEstateStatus)
                 .Include(re => re.HeatingType)
                 .Include(re => re.Favorites)
-                .Include(re => re.Agency)
+                .Include(re => re.Agency).ThenInclude(a => a.RealEstates)
                 .Include(re => re.EnergyClass)
                 .FirstOrDefaultAsync(r => r.RealEstateID == id);
 
-            viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.RealEstate.AgencyID).ToListAsync();
+            //viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.RealEstate.AgencyID).ToListAsync();
 
             if (viewModel.RealEstate == null)
             {

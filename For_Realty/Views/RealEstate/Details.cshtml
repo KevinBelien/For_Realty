@@ -38,20 +38,178 @@
     }
 
 </div>
-<div class="row my-5">
-    <div class="col-md-6">
+<div class="row mt-3 mb-1">
+    <div class="col-md-6 d-flex justify-content-start px-0  align-items-end">
         <a href="#">Voeg toe aan favorieten</a>
     </div>
-    <div class="col-md-6 text-right detail-header">
+    <div class="col-md-6 emp-detail d-flex justify-content-end">
         &euro;&nbsp;@(Model.RealEstate.Price.ToString("N0"))
     </div>
 </div>
-<div class="row my-5">
-        <div class="col-md-12">
+<div class="row mt-2 mb-5">
+    <div class="col-md-6">
+        <div class="row mb-2">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div class="row">
+            <p>@Model.RealEstate.Town.ZIP&nbsp;@Model.RealEstate.Town.Name&nbsp;&nbsp;-&nbsp;&nbsp;@Model.RealEstate.Street&nbsp;@Model.RealEstate.HouseNr</p>
+        </div>
+        <div class="row">
+            @if (Model.RealEstate.AmountBathrooms != null)
+            {
+                <p class="pr-4"><i class="fas fa-bath"></i>&nbsp;@(Model.RealEstate.AmountBathrooms)</p>
+            }
+            @if (Model.RealEstate.AmountBedrooms != null)
+            {
+                <p class="pr-4"><i class="fas fa-bed"></i>&nbsp;@(Model.RealEstate.AmountBedrooms)</p>
+
+            }
+            <p><i class="fas fa-home"></i>&nbsp;@(Model.RealEstate.AreaSpace)m²</p>
+        </div>
+    </div>
+        <div class="col-md-6 d-flex align-items-end flex-column">
             <partial name="_AgencyDetailPartial" model="Model.RealEstate.Agency"/>
         </div>
     </div>
+<div class="row mt-3 d-flex flex-row justify-content-center mb-3">
+    <div class="radio-detail">
+        <label class="radio">
+            <input name="detail" type="radio" onclick="showDiv(this.id);"
+                   value="Beschrijving" id="Description" checked />
+            <span class="text-center">Beschrijving</span>
+        </label>
+    </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="radio-detail">
+        <label class="radio">
+            <input name="detail" type="radio" onclick="showDiv(this.id);"
+                   value="Kenmerken" id="Characteristics" />
+            <span class="text-center">Kenmerken</span>
+        </label>
+    </div>
+
+    <div class="radio-detail">
+        <label class="radio">
+            <input name="detail" type="radio" onclick="showDiv(this.id);"
+                   value="Details" id="Details" />
+            <span class="text-center">Details</span>
+        </label>
+    </div>
 </div>
+
+<div class="row d-flex flex-column">
+    <div id="Beschrijving">
+        <h2 class="detail-title">@Model.RealEstate.DescriptionTitle</h2>
+        <p>@Model.RealEstate.Description</p>
+    </div>
+
+    <div id="Kenmerken" class="d-none">
+        <h2 class="detail-title mb-3">Algemeen</h2>
+
+        <div class="row d-flex flex-row justify-content-start">
+            @if (Model.RealEstate.ConstructionYear != null)
+            {
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Bouwjaar</p>
+                </div>
+
+                <div class="col-md-5">
+                    <p class="detail-subtitle">@Model.RealEstate.ConstructionYear</p>
+                </div>
+            }
+
+            @if (Model.RealEstate.AmountOfFloors != null)
+            {
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Verdiepingen</p>
+                </div>
+                <div class="col-md-1">
+                    <p class="detail-subtitle">@(Model.RealEstate.AmountOfFloors)</p>
+                </div>
+            }
+        </div>
+
+        @if (Model.RealEstate.LivingArea != null)
+        {
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Woonoppervlakte</p>
+                </div>
+                <div class="col-md-5">
+                    <p class="detail-subtitle">@(Model.RealEstate.LivingArea)m²</p>
+                </div>
+
+                @if (Model.RealEstate.FloorLevel != null)
+                {
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">Verdieping</p>
+                    </div>
+                    <div class="col-md-1">
+                        <p class="detail-subtitle">@Model.RealEstate.FloorLevel</p>
+                    </div>
+                }
+            </div>
+        }
+
+
+        <div class="row d-flex justify-content-start">
+            <div class="col-md-3">
+                <p class="detail-subtitle">Grondoppervlakte</p>
+            </div>
+            <div class="col-md-5">
+                <p class="detail-subtitle">@(Model.RealEstate.AreaSpace)m²</p>
+            </div>
+            @if (Model.RealEstate.HasLift != null)
+            {
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Lift</p>
+                </div>
+                <div class="col-md-1">
+                    <p class="detail-subtitle">@(Model.RealEstate.HasLift == true ? "Aanwezig" : "Nee")</p>
+                </div>
+            }
+        </div>
+
+        @if (Model.RealEstate.AmountFacades != null)
+        {
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Gevels</p>
+                </div>
+                <div class="col-md-3">
+                    <p class="detail-subtitle">@(Model.RealEstate.AmountFacades)</p>
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <div id="Detail" class="d-none">
+
+    </div>
+</div>
+    <script>
+        const showDiv = (id) => {
+            console.log(this.id);
+            var divDescription = document.getElementById("Beschrijving");
+            var divKenmerken = document.getElementById("Kenmerken");
+            var divDetail = document.getElementById("Detail");
+
+            if (id == "Description") {
+                divDescription.classList.remove("d-none");
+                divKenmerken.classList.add("d-none");
+                divDetail.classList.add("d-none");
+            }
+            else if (id == "Characteristics") {
+                divDescription.classList.add("d-none");
+                divKenmerken.classList.remove("d-none");
+                divDetail.classList.add("d-none");
+            }
+            else if (id == "Details") {
+                divDescription.classList.add("d-none");
+                divKenmerken.classList.add("d-none");
+                divDetail.classList.remove("d-none");
+            }
+
+        }
+    </script>
