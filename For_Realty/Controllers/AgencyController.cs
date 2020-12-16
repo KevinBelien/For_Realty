@@ -1,69 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using For_Realty.Data;
+﻿using For_Realty.Data;
 using For_Realty.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using For_Realty.Models;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace For_Realty.Controllers
 {
-    public class RealEstateController : Controller
+    public class AgencyController : Controller
     {
         private readonly For_RealtyDbContext _context;
 
-        public RealEstateController(For_RealtyDbContext context)
+        public AgencyController(For_RealtyDbContext context)
         {
             _context = context;
         }
 
-        // GET: RealEstateController
-        public ActionResult Index()
+
+        // GET: AgencyController
+        [AllowAnonymous]
+        public async Task<ActionResult> Index()
         {
-            return View();
+            ListAgencyViewModel viewModel = new ListAgencyViewModel();
+            viewModel.AgencyList = await _context.Agencies.Include(a => a.RealEstates).ToListAsync();
+            return View(viewModel);
         }
 
-        // GET: RealEstateController/Details/5
+        // GET: AgencyController/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-            DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
+            ListAgencyViewModel viewModel = new ListAgencyViewModel();
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            viewModel.RealEstate = await _context.RealEstates
-                .Include(re => re.RealEstatePictures)
-                .Include(re => re.RealEstateSubtype).ThenInclude(t => t.RealEstateType)
-                .Include(re => re.Town)
-                .Include(re => re.RealEstateStatus)
-                .Include(re => re.HeatingType)
-                .Include(re => re.Favorites)
-                .Include(re => re.Agency).ThenInclude(a => a.RealEstates)
-                .Include(re => re.EnergyClass)
-                .FirstOrDefaultAsync(r => r.RealEstateID == id);
-            //viewModel.EstateSubtype = await _context.RealEstateSubtypes
-            //    .Where(st => st.RealEstateSubtypeID == viewModel.RealEstate.RealEstateType.RealEstateSubtypes)
-            //viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.RealEstate.AgencyID).ToListAsync();
+            viewModel.Agency = await _context.Agencies
+                .Include(a => a.RealEstates)
+                .FirstOrDefaultAsync(a => a.AgencyID == id);
 
-            if (viewModel.RealEstate == null)
+            viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.Agency.AgencyID).ToListAsync();
+            if (viewModel.Agency == null)
             {
                 return NotFound();
             }
 
-            return View(viewModel);
+            return PartialView("_AgencyDetailPartial", viewModel);
         }
 
-        // GET: RealEstateController/Create
+        // GET: AgencyController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: RealEstateController/Create
+        // POST: AgencyController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -78,13 +75,13 @@ namespace For_Realty.Controllers
             }
         }
 
-        // GET: RealEstateController/Edit/5
+        // GET: AgencyController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: RealEstateController/Edit/5
+        // POST: AgencyController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -99,13 +96,13 @@ namespace For_Realty.Controllers
             }
         }
 
-        // GET: RealEstateController/Delete/5
+        // GET: AgencyController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: RealEstateController/Delete/5
+        // POST: AgencyController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
@@ -119,7 +116,5 @@ namespace For_Realty.Controllers
                 return View();
             }
         }
-
-
     }
 }

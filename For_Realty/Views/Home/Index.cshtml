@@ -35,15 +35,15 @@
     </div>
 </form>
 
-<h2 class="mt-5 mb-4 head-title-index text-sm-center text-md-left">Nieuw te koop!</h2>
+<h2 class="mt-5 mb-3 head-title-index text-sm-center text-md-left">Nieuw te koop!</h2>
 
-<div class="row mt-5">
+<div class="row mt-4">
     @foreach (var estate in Model.RealEstatesBuy)
     {
         <div class="col-lg-4 col-md-6 col-12 mb-5 mt-3">
             <div class="d-flex justify-content-center">
                 <div class="card">
-                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text card-link">
+                    <a asp-controller="RealEstate" asp-action="Details" asp-route-id="@(estate.RealEstateID)" class="text-decoration-none detail-text card-link">
                         <div>
                             <img src="@(estate.RealEstatePictures.Where(re => re.Title == "Front").SingleOrDefault().FileName)"
                                  class="card-img-top card-img-index" alt="picture of estate witch code @(estate.Code)" />
@@ -64,7 +64,7 @@
                         <div class="card-body text-left">
                             <div class="row mb-0 pt-0 mb-2">
                                 <div class="col-12">
-                                    <p class="card-title">@(estate.RealEstateType.Name)</p>
+                                    <p class="card-title">@(estate.RealEstateSubtype.RealEstateType.Name)</p>
                                 </div>
 
                             </div>
@@ -103,15 +103,15 @@
     }
 </div>
 
-<h2 class="mt-4 mb-4 head-title-index text-sm-center text-md-left">Nieuw te huur!</h2>
+<h2 class="mt-4 mb-3 head-title-index text-sm-center text-md-left">Nieuw te huur!</h2>
 
-<div class="row mt-5">
+<div class="row mt-4">
     @foreach (var estate in Model.RealEstatesHire)
     {
         <div class="col-lg-4 col-md-6 col-12 mb-5 mt-3">
             <div class="d-flex justify-content-center">
                 <div class="card">
-                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none detail-text card-link">
+                    <a asp-controller="RealEstate" asp-action="Details" asp-route-id="@(estate.RealEstateID)" class="text-decoration-none detail-text card-link">
                         <div>
                             <img src="@(estate.RealEstatePictures.Where(re => re.Title == "Front").SingleOrDefault().FileName)"
                                  class="card-img-top card-img-index" alt="picture of estate witch code @(estate.Code)" />
@@ -130,7 +130,7 @@
                         <div class="card-body text-left">
                             <div class="row mb-0 pt-0 mb-2">
                                 <div class="col-12">
-                                    <p class="card-title">@(estate.RealEstateType.Name)</p>
+                                    <p class="card-title">@(estate.RealEstateSubtype.RealEstateType.Name)</p>
                                 </div>
 
                             </div>

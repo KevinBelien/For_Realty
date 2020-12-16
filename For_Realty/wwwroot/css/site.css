@@ -66,8 +66,8 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    display: flex;
-    flex-flow: column;
+/*    display: flex;
+    flex-flow: column;*/
 }
 
 .footer {
@@ -108,11 +108,6 @@ a.navbar-brand {
     font-size: 1.1em;
 }
 
-    .nav-item a:hover,
-    .nav-item .btn-link:hover{
-        color: #1E8194 !important;
-        background-color: white !important;
-    }
 /*
     Index
 */
@@ -225,5 +220,126 @@ label.radio {
 
 .card{
     max-width:400px;
+}
+
+/*
+    RealEstate-Detail
+*/
+
+/*.detail-img{
+    max-height:400px;
+}
+
+.detail-subimg {
+    margin: 0;
+    padding:0;
+    max-height:195px;
+}
+*/
+
+.head-img{
+    height: 300px;
+    width: 700px;
+}
+
+.sub-img{
+    height: 200px;
+    width: 400px;
+}
+
+/*
+    Agency-Detail
+*/
+.card-agency {
+    max-width: 500px;
+    width: 500px;
+    height: 110px;
+}
+
+.agency-card-link {
+    font-size: .9rem;
+    color: #1E8194;
+}
+
+.card-img{
+    max-height:90px;
+    margin-top:10px;
+    padding-left:10px;
+    padding-right: 10px;
+}
+
+.card-title{
+    font-size:1.2rem;
+}
+
+.emp-detail{
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.radio-detail label.radio span {
+    width:200px;
+}
+
+.detail-subtitle{
+    font-weight: 500;
+}
+
+#detail-img figure {
+    position: relative;
+    overflow: hidden;
+}
+
+    #detail-img figure::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+        display: block;
+        content: '';
+        width: 0;
+        height: 0;
+        background: rgba(255,255,255,.2);
+        border-radius: 100%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        opacity: 0;
+    }
+
+    #detail-img figure:hover::before {
+    -webkit-animation: circle .9s;
+    animation: circle .9s;
+}
+
+@-webkit-keyframes circle {
+    0% {
+        opacity: 1;
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+    100% {
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+    }
+}
+
+@keyframes circle {
+    0% {
+        opacity: 1;
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+    100% {
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+    }
 }
 

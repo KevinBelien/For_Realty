@@ -4,14 +4,16 @@ using For_Realty.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace For_Realty.Migrations
 {
     [DbContext(typeof(For_RealtyDbContext))]
-    partial class For_RealtyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201216173643_RealEstateTypeBugFix")]
+    partial class RealEstateTypeBugFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
