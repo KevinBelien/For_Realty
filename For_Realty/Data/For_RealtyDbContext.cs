@@ -81,12 +81,6 @@ namespace For_Realty.Data
             builder.Entity<RealEstate>().Property(r => r.Cadastral).HasColumnType("decimal(8, 2)");
             builder.Entity<RealEstate>().Property(r => r.DateInit).IsRequired();
 
-            builder.Entity<RealEstate>()
-                .HasOne(r => r.RealEstateSubtype)
-                .WithMany(st => st.RealEstates)
-                .HasForeignKey(r => r.RealEstateSubtypeID)
-                .OnDelete(DeleteBehavior.Restrict);
-
         }
 
         private void OnModelCreatingAd(ModelBuilder builder)

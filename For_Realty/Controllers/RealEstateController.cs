@@ -37,7 +37,7 @@ namespace For_Realty.Controllers
 
             viewModel.RealEstate = await _context.RealEstates
                 .Include(re => re.RealEstatePictures)
-                .Include(re => re.RealEstateType).ThenInclude(t => t.RealEstateSubtypes)
+                .Include(re => re.RealEstateSubtype).ThenInclude(t => t.RealEstateType)
                 .Include(re => re.Town)
                 .Include(re => re.RealEstateStatus)
                 .Include(re => re.HeatingType)

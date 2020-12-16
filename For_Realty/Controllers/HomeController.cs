@@ -33,7 +33,7 @@ namespace For_Realty.Controllers
 
             viewModel.RealEstatesBuy = await _context.RealEstates
                 .Include(re => re.RealEstatePictures)
-                .Include(re => re.RealEstateType)
+                .Include(re => re.RealEstateSubtype).ThenInclude(st => st.RealEstateType)
                 .Include(re => re.Town)
                 .Include(re => re.RealEstateStatus)
                 .Where(re => re.RealEstateStatus.Status == "Te koop")
@@ -41,7 +41,7 @@ namespace For_Realty.Controllers
 
             viewModel.RealEstatesHire = await _context.RealEstates
                 .Include(re => re.RealEstatePictures)
-                .Include(re => re.RealEstateType)
+                .Include(re => re.RealEstateSubtype).ThenInclude(st => st.RealEstateType)
                 .Include(re => re.Town)
                 .Include(re => re.RealEstateStatus)
                 .Where(re => re.RealEstateStatus.Status == "Te huur")
