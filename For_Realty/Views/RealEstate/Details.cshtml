@@ -1,0 +1,57 @@
+﻿@model For_Realty.ViewModels.DetailsRealEstateViewModel
+
+@{
+    ViewData["Title"] = Model.RealEstate.RealEstateType.Name + " " + Model.RealEstate.RealEstateStatus.Status.ToLower();
+}
+<div class="row mt-5 mb-4 d-flex flex-row align-items-center justify-content-center">
+    @foreach (var picture in Model.RealEstate.RealEstatePictures.Where(x => x.RealEstateID == Model.RealEstate.RealEstateID).Select((Value, Index) => new { Value, Index }))
+    {
+        if (picture.Value.Title == "Front")
+        {
+            <div class="col-md-6 px-1 order-1">
+                <a href="@(picture.Value.FileName)"
+                   data-lightbox="@("RealEstate" + Model.RealEstate.RealEstateID)">
+                    <img src="@(picture.Value.FileName)"
+                         alt="Head picture" class="img-fluid head-img" />
+                </a>
+            </div>
+        }
+        else
+        {
+            if (picture.Index <= 2)
+            {
+                <div class="px-1 col-md-3 justify-content-center @(picture.Index == 1 ? "order-2" : "order-0")">
+                    <a href="@(picture.Value.FileName)"
+                       data-lightbox="@("RealEstate" + Model.RealEstate.RealEstateID)">
+                        <img src="@(picture.Value.FileName)"
+                             alt="subpicture" class="img-fluid sub-img" />
+                    </a>
+                </div>
+            }
+            else
+            {
+                <a href="@(picture.Value.FileName)"
+                   data-lightbox="@("RealEstate" + Model.RealEstate.RealEstateID)">
+                </a>
+            }
+        }
+    }
+
+</div>
+<div class="row my-5">
+    <div class="col-md-6">
+        <a href="#">Voeg toe aan favorieten</a>
+    </div>
+    <div class="col-md-6 text-right detail-header">
+        &euro;&nbsp;@(Model.RealEstate.Price.ToString("N0"))
+    </div>
+</div>
+<div class="row my-5">
+        <div class="col-md-12">
+            <partial name="_AgencyDetailPartial" model="Model.RealEstate.Agency"/>
+        </div>
+    </div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

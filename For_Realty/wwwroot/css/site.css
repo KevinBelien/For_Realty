@@ -66,8 +66,8 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    display: flex;
-    flex-flow: column;
+/*    display: flex;
+    flex-flow: column;*/
 }
 
 .footer {
@@ -108,11 +108,6 @@ a.navbar-brand {
     font-size: 1.1em;
 }
 
-    .nav-item a:hover,
-    .nav-item .btn-link:hover{
-        color: #1E8194 !important;
-        background-color: white !important;
-    }
 /*
     Index
 */
@@ -226,4 +221,55 @@ label.radio {
 .card{
     max-width:400px;
 }
+
+/*
+    RealEstate-Detail
+*/
+
+/*.detail-img{
+    max-height:400px;
+}
+
+.detail-subimg {
+    margin: 0;
+    padding:0;
+    max-height:195px;
+}
+*/
+
+.head-img{
+    height: 300px;
+    width: 700px;
+}
+
+.sub-img{
+    height: 200px;
+    width: 400px;
+}
+
+/*
+    Agency-Detail
+*/
+.card-agency{
+    max-width:500px;
+    width:500px;
+    height: 110px;
+}
+.agency-card-link{
+    font-size: .9rem;
+}
+
+.card-img{
+    max-height:90px;
+    margin-top:10px;
+    padding-left:10px;
+    padding-right: 10px;
+}
+
+.card-title{
+    font-size:1.2rem;
+}
+
+
+
 
