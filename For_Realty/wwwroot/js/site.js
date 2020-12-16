@@ -6,3 +6,4 @@
 lightbox.option({
     'alwaysShowNavOnTouchDevices': true
 });
+
