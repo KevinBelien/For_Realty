@@ -46,7 +46,7 @@
     <div class="col-md-6 d-flex justify-content-start px-0  align-items-end">
         @*<a href="#">Voeg toe aan favorieten</a>*@
         @*<partial name="_FavoriteCreatePartial" model="Model.Favorite"/>*@
-        <form asp-action="CreateFavorite" asp-controller="RealEstate", asp-route-id="@(Model.RealEstate.RealEstateID)">
+        <form asp-action="CreateFavorite" asp-controller="RealEstate" asp-route-id="@(Model.RealEstate.RealEstateID)">
             <input type="hidden" asp-for="UserAccount.UserAccountID" />
             <input type="hidden" asp-for="RealEstate.RealEstateID" />
             <input type="submit" value="Voeg toe aan favorieten" class="btn btn-primary" />

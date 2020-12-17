@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace For_Realty.Models
 {
-    public class Favorite
+    public partial class Favorite
     {
         public int FavoriteID { get; set; }
 

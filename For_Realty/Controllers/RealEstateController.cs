@@ -71,7 +71,7 @@ namespace For_Realty.Controllers
         //}
 
         // POST: RealEstateController/Create
-        [HttpPost, ActionName("CreateFavorite")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles ="AccountAdmin")]
         public async Task<IActionResult> CreateFavorite(DetailsRealEstateViewModel viewmodel, int id)
@@ -86,8 +86,14 @@ namespace For_Realty.Controllers
                 UserAccountID = viewModel.UserAccount.UserAccountID,
                 RealEstateID = id
             };
-            _context.Favorites.Add(favorite);
-            await _context.SaveChangesAsync();
+
+           List<Favorite> favorites = await _context.Favorites.ToListAsync();
+            if (!favorites.Contains(favorite))
+            {
+                _context.Favorites.Add(favorite);
+                await _context.SaveChangesAsync();
+            }
+
 
                 return RedirectToAction(nameof(Details),"RealEstate", new { id = id});
         }
