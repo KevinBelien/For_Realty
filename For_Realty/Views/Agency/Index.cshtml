@@ -1,0 +1,17 @@
+﻿@model For_Realty.ViewModels.ListAgencyViewModel
+
+@{
+    ViewData["Title"] = "Makelaars";
+}
+<div class="text-center my-4">
+    <h1>Makelaars</h1>
+    <p>Dit zijn alle agentschappen waar wij mee samenwerken</p>
+</div>
+<div class="row">
+    @foreach(var agency in Model.AgencyList)
+    {
+    <div class="col-md-6 mb-4">
+        <partial name="_AgencyDetailPartial" model="agency" />
+    </div>
+    }
+</div>
