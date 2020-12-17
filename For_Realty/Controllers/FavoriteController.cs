@@ -49,8 +49,7 @@ namespace For_Realty.Controllers
         // GET: Favorite/Create
         public IActionResult Create()
         {
-            ViewData["RealEstateID"] = new SelectList(_context.RealEstates, "RealEstateID", "Description");
-            ViewData["UserAccountID"] = new SelectList(_context.UserAccounts, "UserAccountID", "Givenname");
+
             return View();
         }
 

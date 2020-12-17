@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using For_Realty.Areas.Identity.Data;
 using For_Realty.Data;
+using For_Realty.Models;
 using For_Realty.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,10 +18,13 @@ namespace For_Realty.Controllers
     public class RealEstateController : Controller
     {
         private readonly For_RealtyDbContext _context;
+        private readonly UserManager<AccountUser> _userManager;
 
-        public RealEstateController(For_RealtyDbContext context)
+        public RealEstateController(For_RealtyDbContext context, UserManager<AccountUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: RealEstateController
@@ -57,25 +64,32 @@ namespace For_Realty.Controllers
             return View(viewModel);
         }
 
-        // GET: RealEstateController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //// GET: RealEstateController/Create
+        //public ActionResult<Favorite> CreateFavorite()
+        //{
+           
+        //}
 
         // POST: RealEstateController/Create
-        [HttpPost]
+        [HttpPost, ActionName("CreateFavorite")]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [Authorize(Roles ="AccountAdmin")]
+        public async Task<IActionResult> CreateFavorite(DetailsRealEstateViewModel viewmodel, int id)
         {
-            try
+            
+            DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
+            string accountId = _userManager.GetUserId(HttpContext.User);
+            viewModel.UserAccount = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault();
+            
+            Favorite favorite = new Favorite()
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                UserAccountID = viewModel.UserAccount.UserAccountID,
+                RealEstateID = id
+            };
+            _context.Favorites.Add(favorite);
+            await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Details),"RealEstate", new { id = id});
         }
 
         // GET: RealEstateController/Edit/5
