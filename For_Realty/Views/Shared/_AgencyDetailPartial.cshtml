@@ -26,7 +26,7 @@
                 <div class="row align-bottom align-text-bottom mt-1">
                     <div class="col-6">
 
-                        <p class="card-text">@Model.RealEstates.Count()&nbsp;@(Model.RealEstates.Count() > 1 ? "panden" : "pand")</p>
+                        <p class="card-text">@Model.RealEstates.Count()&nbsp;@(Model.RealEstates.Count() != 1 ? "panden" : "pand")</p>
                     </div>
                     <div class="col-6">
 

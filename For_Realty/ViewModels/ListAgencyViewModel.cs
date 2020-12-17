@@ -9,7 +9,5 @@ namespace For_Realty.ViewModels
     public class ListAgencyViewModel
     {
         public List<Agency> AgencyList { get; set; }
-        public List<RealEstate> AgencyRealEstates { get; set; }
-        public Agency Agency { get; set; }
     }
 }

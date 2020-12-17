@@ -32,27 +32,26 @@ namespace For_Realty.Controllers
         }
 
         // GET: AgencyController/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            ListAgencyViewModel viewModel = new ListAgencyViewModel();
+        //public async Task<ActionResult> Details(int? id)
+        //{
+        //    ListAgencyViewModel viewModel = new ListAgencyViewModel();
 
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            viewModel.Agency = await _context.Agencies
-                .Include(a => a.RealEstates)
-                .FirstOrDefaultAsync(a => a.AgencyID == id);
+        //    viewModel.Agency = await _context.Agencies
+        //        .Include(a => a.RealEstates)
+        //        .FirstOrDefaultAsync(a => a.AgencyID == id);
 
-            viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.Agency.AgencyID).ToListAsync();
-            if (viewModel.Agency == null)
-            {
-                return NotFound();
-            }
+        //    if (viewModel.Agency == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return PartialView("_AgencyDetailPartial", viewModel);
-        }
+        //    return PartialView("_AgencyDetailPartial", viewModel);
+        //}
 
         // GET: AgencyController/Create
         public ActionResult Create()

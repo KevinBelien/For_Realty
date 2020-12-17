@@ -107,7 +107,9 @@ a.navbar-brand {
     margin-left: 1.8em;
     font-size: 1.1em;
 }
-
+.emp-nav-button {
+    font-weight:500;
+}
 /*
     Index
 */
