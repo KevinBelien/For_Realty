@@ -54,7 +54,7 @@
             <form asp-action="CreateFavorite" asp-controller="RealEstate" asp-route-id="@(Model.RealEstate.RealEstateID)">
                 <input type="hidden" asp-for="UserAccount.UserAccountID" />
                 <input type="hidden" asp-for="RealEstate.RealEstateID" />
-                <input type="submit" value="Voeg toe aan verlanglijstje" class="btn btn-primary" />
+                <input type="submit" value="Voeg toe aan verlanglijstje" class="p-0 m-0 btn btn-link font-weight-bold" />
             </form>
         }
         else
@@ -62,7 +62,7 @@
             <form asp-action="DeleteFavorite" asp-controller="RealEstate" asp-route-realEstateID="@(Model.RealEstate.RealEstateID)">
                 <input type="hidden" asp-for="UserAccount.UserAccountID" />
                 <input type="hidden" asp-for="RealEstate.RealEstateID" />
-                <input type="submit" value="Verwijder uit verlanglijstje" class="btn btn-primary" />
+                <input type="submit" value="Verwijder uit verlanglijstje" class="p-0 m-0 btn btn-link font-weight-bold" />
             </form>
         }
 

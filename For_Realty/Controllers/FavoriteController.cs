@@ -7,23 +7,38 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using For_Realty.Data;
 using For_Realty.Models;
+using For_Realty.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using For_Realty.Areas.Identity.Data;
 
 namespace For_Realty.Controllers
 {
     public class FavoriteController : Controller
     {
         private readonly For_RealtyDbContext _context;
+        private readonly UserManager<AccountUser> _userManager;
 
-        public FavoriteController(For_RealtyDbContext context)
+
+        public FavoriteController(For_RealtyDbContext context, UserManager<AccountUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Favorite
         public async Task<IActionResult> Index()
         {
-            var for_RealtyDbContext = _context.Favorites.Include(f => f.RealEstate).Include(f => f.UserAccount);
-            return View(await for_RealtyDbContext.ToListAsync());
+            ListFavoritesViewModel viewModel = new ListFavoritesViewModel();
+            viewModel.User = GetUser();
+            viewModel.Favorites = await _context.Favorites
+                .Include(f => f.RealEstate).ThenInclude(re => re.Agency)
+                .Include(f => f.RealEstate).ThenInclude(re => re.RealEstateSubtype).ThenInclude(st => st.RealEstateType)
+                .Include(f => f.RealEstate).ThenInclude(re => re.Town)
+                .Include(f => f.RealEstate).ThenInclude(re => re.RealEstatePictures)
+                .Include(f => f.RealEstate).ThenInclude(re => re.RealEstateStatus)
+                .Where(f => f.UserAccountID == viewModel.User.UserAccountID).ToListAsync();
+
+            return View(viewModel);
         }
 
         // GET: Favorite/Details/5
@@ -160,6 +175,15 @@ namespace For_Realty.Controllers
         private bool FavoriteExists(int id)
         {
             return _context.Favorites.Any(e => e.FavoriteID == id);
+        }
+
+        private UserAccount GetUser()
+        {
+            string accountId = _userManager.GetUserId(HttpContext.User);
+            return _context.UserAccounts.Where(a => a.UserID == accountId)
+                .Include(u => u.Favorites)
+                .ThenInclude(f => f.RealEstate)
+                .FirstOrDefault();
         }
     }
 }
