@@ -34,7 +34,7 @@ namespace For_Realty.Controllers
         }
 
         // GET: RealEstateController/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
             if (id == null)
@@ -52,6 +52,9 @@ namespace For_Realty.Controllers
                 .Include(re => re.Agency).ThenInclude(a => a.RealEstates)
                 .Include(re => re.EnergyClass)
                 .FirstOrDefaultAsync(r => r.RealEstateID == id);
+
+            viewModel.UserAccount = GetUser();
+
             //viewModel.EstateSubtype = await _context.RealEstateSubtypes
             //    .Where(st => st.RealEstateSubtypeID == viewModel.RealEstate.RealEstateType.RealEstateSubtypes)
             //viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.RealEstate.AgencyID).ToListAsync();
@@ -79,19 +82,19 @@ namespace For_Realty.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles ="AccountAdmin")]
-        public async Task<IActionResult> CreateFavorite(DetailsRealEstateViewModel viewmodel, int id)
+        public async Task<IActionResult> CreateFavorite(DetailsRealEstateViewModel viewModel, int id)
         {
-            if (viewmodel.UserAccount.UserAccountID == 0)
-            {
-                viewmodel = new DetailsRealEstateViewModel();
-                string accountId = _userManager.GetUserId(HttpContext.User);
-                viewmodel.UserAccount = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault();
-            }
 
+            if (viewModel.UserAccount.UserAccountID == 0)
+            {
+                viewModel = new DetailsRealEstateViewModel();
+                string accountId = _userManager.GetUserId(HttpContext.User);
+                viewModel.UserAccount = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault();
+            }
 
             Favorite favorite = new Favorite()
             {
-                UserAccountID = viewmodel.UserAccount.UserAccountID,
+                UserAccountID = viewModel.UserAccount.UserAccountID,
                 RealEstateID = id
             };
 
@@ -126,26 +129,40 @@ namespace For_Realty.Controllers
         }
 
         // GET: RealEstateController/Delete/5
-        public ActionResult Delete(int id)
+        public Task<IActionResult> DeleteFavorite(int realEstateID)
         {
-            return View();
+            return DeleteFavoriteConfirmed(realEstateID);
         }
 
         // POST: RealEstateController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [Authorize(Roles = "AccountAdmin")]
+        public async Task<IActionResult> DeleteFavoriteConfirmed(int realEstateID)
         {
-            try
+
+            DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
+            viewModel.UserAccount = GetUser();
+            var favorite = _context.Favorites.Where(f => f.UserAccountID == viewModel.UserAccount.UserAccountID)
+                .Where(f => f.RealEstateID == realEstateID).FirstOrDefault();
+
+            if (favorite == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+
+            _context.Favorites.Remove(favorite);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), "RealEstate", new { id = realEstateID });
         }
 
-
+        private UserAccount GetUser()
+        {
+            string accountId = _userManager.GetUserId(HttpContext.User);
+            return _context.UserAccounts.Where(a => a.UserID == accountId)
+                .Include(u => u.Favorites)
+                .ThenInclude(f => f.RealEstate)
+                .FirstOrDefault();
+        }
     }
 }
