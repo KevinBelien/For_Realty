@@ -64,11 +64,16 @@ namespace For_Realty.Controllers
             return View(viewModel);
         }
 
-        //// GET: RealEstateController/Create
-        //public ActionResult<Favorite> CreateFavorite()
-        //{
-           
-        //}
+        // GET: RealEstateController/Create
+        public Task<IActionResult> CreateFavorite(int id)
+        {
+            DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
+            string accountId = _userManager.GetUserId(HttpContext.User);
+            viewModel.UserAccount = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault();
+
+            //return RedirectToAction(nameof(Details), "RealEstate", new { id = id });
+            return CreateFavorite(viewModel, id);
+        }
 
         // POST: RealEstateController/Create
         [HttpPost]
@@ -76,14 +81,17 @@ namespace For_Realty.Controllers
         [Authorize(Roles ="AccountAdmin")]
         public async Task<IActionResult> CreateFavorite(DetailsRealEstateViewModel viewmodel, int id)
         {
-            
-            DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
-            string accountId = _userManager.GetUserId(HttpContext.User);
-            viewModel.UserAccount = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault();
-            
+            if (viewmodel.UserAccount.UserAccountID == 0)
+            {
+                viewmodel = new DetailsRealEstateViewModel();
+                string accountId = _userManager.GetUserId(HttpContext.User);
+                viewmodel.UserAccount = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault();
+            }
+
+
             Favorite favorite = new Favorite()
             {
-                UserAccountID = viewModel.UserAccount.UserAccountID,
+                UserAccountID = viewmodel.UserAccount.UserAccountID,
                 RealEstateID = id
             };
 
@@ -93,8 +101,6 @@ namespace For_Realty.Controllers
                 _context.Favorites.Add(favorite);
                 await _context.SaveChangesAsync();
             }
-
-
                 return RedirectToAction(nameof(Details),"RealEstate", new { id = id});
         }
 
