@@ -345,3 +345,32 @@ label.radio {
     }
 }
 
+/*
+    Favorites
+*/
+.nofav-img{
+    max-width:400px;
+    max-height:400px;
+    margin-left:9rem;
+}
+.emp-fav{
+    font-weight: 500;
+    font-size: 1.6rem;
+}
+
+.card-fav{
+    max-width: 700px;
+}
+
+
+.card-logo-fav{
+    max-height: 40px;
+    max-width: 40px;
+}
+
+.card-img-top {
+    object-fit: cover;
+    object-position:bottom;
+}
+
+

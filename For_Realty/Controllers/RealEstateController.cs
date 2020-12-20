@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using For_Realty.Areas.Identity.Data;
 using For_Realty.Data;
+using For_Realty.Models;
 using For_Realty.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,10 +18,13 @@ namespace For_Realty.Controllers
     public class RealEstateController : Controller
     {
         private readonly For_RealtyDbContext _context;
+        private readonly UserManager<AccountUser> _userManager;
 
-        public RealEstateController(For_RealtyDbContext context)
+        public RealEstateController(For_RealtyDbContext context, UserManager<AccountUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: RealEstateController
@@ -27,7 +34,7 @@ namespace For_Realty.Controllers
         }
 
         // GET: RealEstateController/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
             if (id == null)
@@ -45,6 +52,9 @@ namespace For_Realty.Controllers
                 .Include(re => re.Agency).ThenInclude(a => a.RealEstates)
                 .Include(re => re.EnergyClass)
                 .FirstOrDefaultAsync(r => r.RealEstateID == id);
+
+            viewModel.UserAccount = GetUser();
+
             //viewModel.EstateSubtype = await _context.RealEstateSubtypes
             //    .Where(st => st.RealEstateSubtypeID == viewModel.RealEstate.RealEstateType.RealEstateSubtypes)
             //viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.RealEstate.AgencyID).ToListAsync();
@@ -58,24 +68,43 @@ namespace For_Realty.Controllers
         }
 
         // GET: RealEstateController/Create
-        public ActionResult Create()
+        public Task<IActionResult> CreateFavorite(int id)
         {
-            return View();
+            DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
+            string accountId = _userManager.GetUserId(HttpContext.User);
+            viewModel.UserAccount = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault();
+
+            //return RedirectToAction(nameof(Details), "RealEstate", new { id = id });
+            return CreateFavorite(viewModel, id);
         }
 
         // POST: RealEstateController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [Authorize(Roles ="AccountAdmin")]
+        public async Task<IActionResult> CreateFavorite(DetailsRealEstateViewModel viewModel, int id)
         {
-            try
+
+            if (viewModel.UserAccount.UserAccountID == 0)
             {
-                return RedirectToAction(nameof(Index));
+                viewModel = new DetailsRealEstateViewModel();
+                string accountId = _userManager.GetUserId(HttpContext.User);
+                viewModel.UserAccount = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault();
             }
-            catch
+
+            Favorite favorite = new Favorite()
             {
-                return View();
+                UserAccountID = viewModel.UserAccount.UserAccountID,
+                RealEstateID = id
+            };
+
+           List<Favorite> favorites = await _context.Favorites.ToListAsync();
+            if (!favorites.Contains(favorite))
+            {
+                _context.Favorites.Add(favorite);
+                await _context.SaveChangesAsync();
             }
+                return RedirectToAction(nameof(Details),"RealEstate", new { id = id});
         }
 
         // GET: RealEstateController/Edit/5
@@ -100,26 +129,40 @@ namespace For_Realty.Controllers
         }
 
         // GET: RealEstateController/Delete/5
-        public ActionResult Delete(int id)
+        public Task<IActionResult> DeleteFavorite(int realEstateID)
         {
-            return View();
+            return DeleteFavoriteConfirmed(realEstateID);
         }
 
         // POST: RealEstateController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [Authorize(Roles = "AccountAdmin")]
+        public async Task<IActionResult> DeleteFavoriteConfirmed(int realEstateID)
         {
-            try
+
+            DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
+            viewModel.UserAccount = GetUser();
+            var favorite = _context.Favorites.Where(f => f.UserAccountID == viewModel.UserAccount.UserAccountID)
+                .Where(f => f.RealEstateID == realEstateID).FirstOrDefault();
+
+            if (favorite == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+
+            _context.Favorites.Remove(favorite);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), "RealEstate", new { id = realEstateID });
         }
 
-
+        private UserAccount GetUser()
+        {
+            string accountId = _userManager.GetUserId(HttpContext.User);
+            return _context.UserAccounts.Where(a => a.UserID == accountId)
+                .Include(u => u.Favorites)
+                .ThenInclude(f => f.RealEstate)
+                .FirstOrDefault();
+        }
     }
 }

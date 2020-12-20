@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace For_Realty.ViewModels
 {
-    public class DetailsRealEstateViewModel
+    public class ListFavoritesViewModel
     {
-        public RealEstate RealEstate { get; set; }
-        public UserAccount UserAccount { get; set; }
+        public List<Favorite> Favorites { get; set; }
+        public UserAccount User { get; set; }
     }
 }

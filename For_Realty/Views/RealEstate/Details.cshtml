@@ -44,7 +44,28 @@
 </div>
 <div class="row mt-3 mb-1">
     <div class="col-md-6 d-flex justify-content-start px-0  align-items-end">
-        <a href="#">Voeg toe aan favorieten</a>
+        @*<a href="#">Voeg toe aan favorieten</a>*@
+        @*<partial name="_FavoriteCreatePartial" model="Model.Favorite"/>*@
+
+        @if (Model.UserAccount == null || !(Model.UserAccount.Favorites.Contains
+           (Model.RealEstate.Favorites.Where(re => re.UserAccountID == Model.UserAccount.UserAccountID).FirstOrDefault())))
+
+        {
+            <form asp-action="CreateFavorite" asp-controller="RealEstate" asp-route-id="@(Model.RealEstate.RealEstateID)">
+                <input type="hidden" asp-for="UserAccount.UserAccountID" />
+                <input type="hidden" asp-for="RealEstate.RealEstateID" />
+                <input type="submit" value="Voeg toe aan verlanglijstje" class="p-0 m-0 btn btn-link font-weight-bold" />
+            </form>
+        }
+        else
+        {
+            <form asp-action="DeleteFavorite" asp-controller="RealEstate" asp-route-realEstateID="@(Model.RealEstate.RealEstateID)">
+                <input type="hidden" asp-for="UserAccount.UserAccountID" />
+                <input type="hidden" asp-for="RealEstate.RealEstateID" />
+                <input type="submit" value="Verwijder uit verlanglijstje" class="p-0 m-0 btn btn-link font-weight-bold" />
+            </form>
+        }
+
     </div>
     <div class="col-md-6 emp-detail d-flex justify-content-end">
         &euro;&nbsp;@(Model.RealEstate.Price.ToString("N0"))
