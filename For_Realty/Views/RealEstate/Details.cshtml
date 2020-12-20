@@ -1,0 +1,414 @@
+﻿@model For_Realty.ViewModels.DetailsRealEstateViewModel
+
+@{
+    ViewData["Title"] = Model.RealEstate.RealEstateSubtype.Name
+        + " " + Model.RealEstate.RealEstateStatus.Status.ToLower();
+}
+<div class="row mt-5 mb-4 d-flex flex-row align-items-center justify-content-center" id="detail-img">
+    @foreach (var picture in Model.RealEstate.RealEstatePictures.Where(x => x.RealEstateID == Model.RealEstate.RealEstateID).Select((Value, Index) => new { Value, Index }))
+    {
+        if (picture.Value.Title == "Front")
+        {
+            <div class="col-md-6 px-1 order-1">
+                <a href="@(picture.Value.FileName)"
+                   data-lightbox="@("RealEstate" + Model.RealEstate.RealEstateID)">
+                    <figure>
+                        <img src="@(picture.Value.FileName)"
+                             alt="Head picture" class="img-fluid head-img detail-img" />
+                    </figure>
+                </a>
+                </div>
+            }
+            else
+            {
+                if (picture.Index <= 2)
+                {
+                    <figure class="px-1 col-md-3 justify-content-center @(picture.Index == 1 ? "order-2" : "order-0")">
+                        <a href="@(picture.Value.FileName)"
+                           data-lightbox="@("RealEstate" + Model.RealEstate.RealEstateID)">
+                            <figure><img src="@(picture.Value.FileName)"
+                                 alt="subpicture" class="img-fluid sub-img detail-img" />
+                    </figure>
+                    </a>
+                    </figure>
+                }
+                else
+                {
+                    <a href="@(picture.Value.FileName)"
+                       data-lightbox="@("RealEstate" + Model.RealEstate.RealEstateID)">
+                    </a>
+                }
+            }
+        }
+
+</div>
+<div class="row mt-3 mb-1">
+    <div class="col-md-6 d-flex justify-content-start px-0  align-items-end">
+        @*<a href="#">Voeg toe aan favorieten</a>*@
+        @*<partial name="_FavoriteCreatePartial" model="Model.Favorite"/>*@
+
+        @if (Model.UserAccount == null || !(Model.UserAccount.Favorites.Contains
+           (Model.RealEstate.Favorites.Where(re => re.UserAccountID == Model.UserAccount.UserAccountID).FirstOrDefault())))
+
+        {
+            <form asp-action="CreateFavorite" asp-controller="RealEstate" asp-route-id="@(Model.RealEstate.RealEstateID)">
+                <input type="hidden" asp-for="UserAccount.UserAccountID" />
+                <input type="hidden" asp-for="RealEstate.RealEstateID" />
+                <input type="submit" value="Voeg toe aan verlanglijstje" class="p-0 m-0 btn btn-link font-weight-bold" />
+            </form>
+        }
+        else
+        {
+            <form asp-action="DeleteFavorite" asp-controller="RealEstate" asp-route-realEstateID="@(Model.RealEstate.RealEstateID)">
+                <input type="hidden" asp-for="UserAccount.UserAccountID" />
+                <input type="hidden" asp-for="RealEstate.RealEstateID" />
+                <input type="submit" value="Verwijder uit verlanglijstje" class="p-0 m-0 btn btn-link font-weight-bold" />
+            </form>
+        }
+
+    </div>
+    <div class="col-md-6 emp-detail d-flex justify-content-end">
+        &euro;&nbsp;@(Model.RealEstate.Price.ToString("N0"))
+    </div>
+</div>
+<div class="row mt-2 mb-5">
+    <div class="col-md-6">
+        <div class="row mb-2">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div class="row">
+            <p>@Model.RealEstate.Town.ZIP&nbsp;@Model.RealEstate.Town.Name&nbsp;&nbsp;-&nbsp;&nbsp;@Model.RealEstate.Street&nbsp;@Model.RealEstate.HouseNr</p>
+        </div>
+        <div class="row">
+            @if (Model.RealEstate.AmountBathrooms != null)
+            {
+                <p class="pr-4"><i class="fas fa-bath"></i>&nbsp;@(Model.RealEstate.AmountBathrooms)</p>
+            }
+            @if (Model.RealEstate.AmountBedrooms != null)
+            {
+                <p class="pr-4"><i class="fas fa-bed"></i>&nbsp;@(Model.RealEstate.AmountBedrooms)</p>
+
+            }
+            <p><i class="fas fa-home"></i>&nbsp;@(Model.RealEstate.AreaSpace)m²</p>
+        </div>
+    </div>
+    <div class="col-md-6 d-flex align-items-end flex-column">
+        <partial name="_AgencyDetailPartial" model="Model.RealEstate.Agency" />
+    </div>
+</div>
+<div class="row mt-3 d-flex flex-row justify-content-center mb-3">
+    <div class="radio-detail">
+        <label class="radio">
+            <input name="detail" type="radio" onclick="showDiv(this.id);"
+                   value="Beschrijving" id="Description" checked />
+            <span class="text-center">Beschrijving</span>
+        </label>
+    </div>
+
+    <div class="radio-detail">
+        <label class="radio">
+            <input name="detail" type="radio" onclick="showDiv(this.id);"
+                   value="Kenmerken" id="Characteristics" />
+            <span class="text-center">Kenmerken</span>
+        </label>
+    </div>
+    @if (Model.RealEstate.RealEstateSubtype.RealEstateType.Name != "Grond")
+    {
+        <div class="radio-detail">
+            <label class="radio">
+                <input name="detail" type="radio" onclick="showDiv(this.id);"
+                       value="Details" id="Details" />
+                <span class="text-center">Details</span>
+            </label>
+        </div>
+    }
+
+</div>
+
+<div class="row d-flex flex-column mb-2">
+    <div id="Beschrijving">
+        <h2 class="detail-title mb-2">@Model.RealEstate.DescriptionTitle</h2>
+        <p>@Model.RealEstate.Description</p>
+    </div>
+
+    <div id="Kenmerken" class="d-none">
+        <div class="mb-3">
+            <h2 class="detail-title mb-3">Algemeen</h2>
+
+            <div class="row d-flex flex-row justify-content-start">
+                @if (Model.RealEstate.ConstructionYear != null)
+                {
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">Bouwjaar</p>
+                    </div>
+
+                    <div class="col-md-5">
+                        <p>@Model.RealEstate.ConstructionYear</p>
+                    </div>
+                }
+
+                @if (Model.RealEstate.AmountOfFloors != null)
+                {
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">Verdiepingen</p>
+                    </div>
+                    <div class="col-md-1">
+                        <p>@(Model.RealEstate.AmountOfFloors)</p>
+                    </div>
+                }
+            </div>
+
+            @if (Model.RealEstate.LivingArea != null)
+            {
+                <div class="row d-flex justify-content-start">
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">Woonoppervlakte</p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>@(Model.RealEstate.LivingArea)m²</p>
+                    </div>
+
+                    @if (Model.RealEstate.FloorLevel != null)
+                    {
+                        <div class="col-md-3">
+                            <p class="detail-subtitle">Verdieping</p>
+                        </div>
+                        <div class="col-md-1">
+                            <p>@Model.RealEstate.FloorLevel</p>
+                        </div>
+                    }
+                </div>
+            }
+
+
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Grondoppervlakte</p>
+                </div>
+                <div class="col-md-5">
+                    <p>@(Model.RealEstate.AreaSpace)m²</p>
+                </div>
+                @if (Model.RealEstate.HasLift != null)
+                {
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">Lift</p>
+                    </div>
+                    <div class="col-md-1">
+                        <p>@(Model.RealEstate.HasLift == true ? "Aanwezig" : "Nee")</p>
+                    </div>
+                }
+            </div>
+
+            @if (Model.RealEstate.AmountFacades != null)
+            {
+                <div class="row d-flex justify-content-start">
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">Gevels</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p>@(Model.RealEstate.AmountFacades)</p>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        @if (Model.RealEstate.EnergyClass != null && Model.RealEstate.HeatingType != null && Model.RealEstate.IsIsolated != null)
+        {
+            <div class="mb-2">
+                <h2 class="detail-title mb-3">Energie</h2>
+
+                <div class="row d-flex justify-content-start">
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">EPC</p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>@(Model.RealEstate.EnergyClass.Letter)</p>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-start">
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">Verwarmingstype</p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>@(Model.RealEstate.HeatingType.Name)</p>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-start">
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">Isolatie</p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>@(Model.RealEstate.IsIsolated == true ? "Ja" : "Nee")</p>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="mb-2">
+            <h2 class="detail-title mb-3">Diversen</h2>
+
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Stedenbouwkundige vergunning</p>
+                </div>
+                <div class="col-md-5">
+                    <p class="align-content-center">@(Model.RealEstate.HasBuildingPermit == true ? "Ja" : "Nee")</p>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Overstromingsgevoelig</p>
+                </div>
+                <div class="col-md-5">
+                    <p>@(Model.RealEstate.IsFloodArea == true ? "Ja" : "Nee")</p>
+                </div>
+            </div>
+
+        </div>
+
+        <h2 class="detail-title mb-3">Financieel</h2>
+
+        <div class="row d-flex justify-content-start">
+            <div class="col-md-3">
+                <p class="detail-subtitle">Prijs</p>
+            </div>
+            <div class="col-md-5">
+                <p><strong>&euro; @(Model.RealEstate.Price.ToString("N0"))</strong></p>
+            </div>
+        </div>
+        @if (Model.RealEstate.Cadastral != null)
+        {
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Kadastraal inkomen</p>
+                </div>
+                <div class="col-md-5">
+                    <p>&euro; @(String.Format("{0:N2}",Model.RealEstate.Cadastral))</p>
+                </div>
+            </div>
+        }
+    </div>
+
+
+    <div id="Detail" class="d-none">
+        <div class="mb-2">
+            <h2 class="detail-title mb-3">Binnenshuis</h2>
+
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Badkamers</p>
+                </div>
+                <div class="col-md-5">
+                    <p>@(Model.RealEstate.AmountBathrooms)</p>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Slaapkamers</p>
+                </div>
+                <div class="col-md-5">
+                    <p>@(Model.RealEstate.AmountBedrooms)</p>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Toiletten</p>
+                </div>
+                <div class="col-md-5">
+                    <p>@(Model.RealEstate.AmountToilets)</p>
+                </div>
+            </div>
+
+
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Keukenoppervlakte</p>
+                </div>
+                <div class="col-md-5">
+                    <p>@(Model.RealEstate.AreaKitchen)m²</p>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-start">
+                <div class="col-md-3">
+                    <p class="detail-subtitle">Dressing</p>
+                </div>
+                <div class="col-md-5">
+                    <p>@(Model.RealEstate.HasDressing == true ? "Aanwezig" : "Afwezig")</p>
+                </div>
+            </div>
+            @if (Model.RealEstate.RealEstateSubtype.RealEstateType.Name == "Huis")
+            {
+                <div class="row d-flex justify-content-start">
+                    <div class="col-md-3">
+                        <p class="detail-subtitle">Zolder</p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>@(Model.RealEstate.HasAttic == true ? "Aanwezig" : "Afwezig")</p>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <h2 class="detail-title mb-3">Buitenshuis</h2>
+        <div class="row d-flex justify-content-start">
+            <div class="col-md-3">
+                <p class="detail-subtitle">Tuin</p>
+            </div>
+            <div class="col-md-5">
+                <p>@(Model.RealEstate.HasGarden == true ? "Aanwezig" : "Afwezig")</p>
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-start">
+            <div class="col-md-3">
+                <p class="detail-subtitle">Terras</p>
+            </div>
+            <div class="col-md-5">
+                <p>@(Model.RealEstate.HasTerrace == true ? "Aanwezig" : "Afwezig")</p>
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-start">
+            <div class="col-md-3">
+                <p class="detail-subtitle">Parkinggelegenheid</p>
+            </div>
+            <div class="col-md-5">
+                <p>@(Model.RealEstate.HasParkingFacility == true ? "Aanwezig" : "Afwezig")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const showDiv = (id) => {
+        console.log(this.id);
+        var divDescription = document.getElementById("Beschrijving");
+        var divKenmerken = document.getElementById("Kenmerken");
+        var divDetail = document.getElementById("Detail");
+
+        if (id == "Description") {
+            divDescription.classList.remove("d-none");
+            divKenmerken.classList.add("d-none");
+            divDetail.classList.add("d-none");
+        }
+        else if (id == "Characteristics") {
+            divDescription.classList.add("d-none");
+            divKenmerken.classList.remove("d-none");
+            divDetail.classList.add("d-none");
+        }
+        else if (id == "Details") {
+            divDescription.classList.add("d-none");
+            divKenmerken.classList.add("d-none");
+            divDetail.classList.remove("d-none");
+        }
+
+    }
+
+
+</script>

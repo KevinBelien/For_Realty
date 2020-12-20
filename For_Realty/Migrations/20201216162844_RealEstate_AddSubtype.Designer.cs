@@ -4,14 +4,16 @@ using For_Realty.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace For_Realty.Migrations
 {
     [DbContext(typeof(For_RealtyDbContext))]
-    partial class For_RealtyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201216162844_RealEstate_AddSubtype")]
+    partial class RealEstate_AddSubtype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,6 +352,9 @@ namespace For_Realty.Migrations
                     b.Property<int>("RealEstateSubtypeID")
                         .HasColumnType("int");
 
+                    b.Property<int>("RealEstateTypeID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -371,6 +376,8 @@ namespace For_Realty.Migrations
                     b.HasIndex("RealEstateStatusID");
 
                     b.HasIndex("RealEstateSubtypeID");
+
+                    b.HasIndex("RealEstateTypeID");
 
                     b.HasIndex("TownID");
 
@@ -725,6 +732,12 @@ namespace For_Realty.Migrations
                     b.HasOne("For_Realty.Models.RealEstateSubtype", "RealEstateSubtype")
                         .WithMany("RealEstates")
                         .HasForeignKey("RealEstateSubtypeID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("For_Realty.Models.RealEstateType", "RealEstateType")
+                        .WithMany("RealEstates")
+                        .HasForeignKey("RealEstateTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

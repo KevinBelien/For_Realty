@@ -11,7 +11,6 @@ namespace For_Realty.Models
         public string Name { get; set; }
 
         public ICollection<Ad> Ads { get; set; }
-        public ICollection<RealEstate> RealEstates { get; set; }
         public ICollection<RealEstateSubtype> RealEstateSubtypes { get; set; }
     }
 }

@@ -3,6 +3,15 @@ for details on configuring this project to bundle and minify static web assets. 
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Nunito:wght@400;600;800&family=Open+Sans&family=Roboto&display=swap');
 
+/*@media (min-width: 576px) and (max-width: 767px){
+    h2.head-title-index::before {
+        left: 50%;
+        margin-left: -20px;
+    }
+}*/
+
+
+
 /* Provide sufficient contrast against white background */
 a {
     color: #0366d6;
@@ -57,8 +66,8 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    display: flex;
-    flex-flow: column;
+/*    display: flex;
+    flex-flow: column;*/
 }
 
 .footer {
@@ -95,15 +104,12 @@ a.navbar-brand {
 }
 
 .nav-item {
-    margin-left: 2em;
+    margin-left: 1.8em;
     font-size: 1.1em;
 }
-
-    .nav-item a:hover,
-    .nav-item .btn-link:hover{
-        color: #1E8194 !important;
-        background-color: white !important;
-    }
+.emp-nav-button {
+    font-weight:500;
+}
 /*
     Index
 */
@@ -122,7 +128,7 @@ h2 {
             height: 3px;
             background-color: #1E8194;
             width: 50px;
-            bottom: -6px;
+            bottom: -8px;
         }
 
 .searchbox {
@@ -209,4 +215,162 @@ label.radio {
     background-color: #fff;
     font-weight: 600;
 }
+
+.card-link:hover {
+    box-shadow: 0 2px 9px rgba(0,18,39,.2);
+}
+
+.card{
+    max-width:400px;
+}
+
+/*
+    RealEstate-Detail
+*/
+
+/*.detail-img{
+    max-height:400px;
+}
+
+.detail-subimg {
+    margin: 0;
+    padding:0;
+    max-height:195px;
+}
+*/
+
+.head-img{
+    height: 300px;
+    width: 700px;
+}
+
+.sub-img{
+    height: 200px;
+    width: 400px;
+}
+
+/*
+    Agency-Detail
+*/
+.card-agency {
+    max-width: 500px;
+    width: 500px;
+    height: 110px;
+}
+
+.agency-card-link {
+    font-size: .9rem;
+    color: #1E8194;
+}
+
+.card-img{
+    max-height:90px;
+    margin-top:10px;
+    padding-left:10px;
+    padding-right: 10px;
+}
+
+.card-title{
+    font-size:1.2rem;
+}
+
+.emp-detail{
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.radio-detail label.radio span {
+    width:200px;
+}
+
+.detail-subtitle{
+    font-weight: 500;
+}
+
+#detail-img figure {
+    position: relative;
+    overflow: hidden;
+}
+
+    #detail-img figure::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+        display: block;
+        content: '';
+        width: 0;
+        height: 0;
+        background: rgba(255,255,255,.2);
+        border-radius: 100%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        opacity: 0;
+    }
+
+    #detail-img figure:hover::before {
+    -webkit-animation: circle .9s;
+    animation: circle .9s;
+}
+
+@-webkit-keyframes circle {
+    0% {
+        opacity: 1;
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+    100% {
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+    }
+}
+
+@keyframes circle {
+    0% {
+        opacity: 1;
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+    100% {
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+    }
+}
+
+/*
+    Favorites
+*/
+.nofav-img{
+    max-width:400px;
+    max-height:400px;
+    margin-left:9rem;
+}
+.emp-fav{
+    font-weight: 500;
+    font-size: 1.6rem;
+}
+
+.card-fav{
+    max-width: 700px;
+}
+
+
+.card-logo-fav{
+    max-height: 40px;
+    max-width: 40px;
+}
+
+.card-img-top {
+    object-fit: cover;
+    object-position:bottom;
+}
+
 
