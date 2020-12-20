@@ -355,21 +355,22 @@ label.radio {
 }
 .emp-fav{
     font-weight: 500;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
 }
 
 .card-fav{
-    max-width: 800px;
+    max-width: 700px;
 }
 
 
 .card-logo-fav{
-    max-height: 80px;
-    max-width: 80px;
+    max-height: 40px;
+    max-width: 40px;
 }
 
 .card-img-top {
     object-fit: cover;
     object-position:bottom;
 }
+
 
