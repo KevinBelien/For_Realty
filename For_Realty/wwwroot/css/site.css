@@ -152,7 +152,7 @@ h2 {
 }
 
 
-label.radio {
+label.radio{
     cursor: pointer;
 }
 
@@ -162,6 +162,7 @@ label.radio {
         left: 0;
         visibility: hidden;
         pointer-events: none;
+        z-index:999999999;
     }
 
     label.radio span {
@@ -172,6 +173,7 @@ label.radio {
         font-weight: 600;
         font-size: 16px;
         border: 1px solid #707070;
+        z-index: 1;
     }
 
     label.radio input:checked + span {
@@ -373,4 +375,45 @@ label.radio {
     object-position:bottom;
 }
 
+/*
+    Ad
+*/
+.intro-header-ad{
+    font-weight: 500;
+    font-size:1.3rem;
+}
+
+.input-icon {
+    position: relative;
+}
+
+    .input-icon > i {
+        position: absolute;
+        display: block;
+        transform: translate(0, -50%);
+        top: 50%;
+        pointer-events: none;
+        width: 25px;
+        text-align: center;
+        font-style: normal;
+    }
+
+    .input-icon > input {
+        padding-left: 25px;
+        padding-right: 0;
+    }
+
+.input-icon-right > i {
+    right: 25px;
+}
+
+.input-icon-right > input {
+    padding-left: 0;
+    padding-right: 5px;
+    text-align: right;
+}
+
+.input-rad{
+    width: 80px;
+}
 

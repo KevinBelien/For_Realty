@@ -98,7 +98,8 @@ namespace For_Realty.Migrations
                         .HasColumnType("decimal(10, 2)");
 
                     b.Property<int>("Radius")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasMaxLength(3);
 
                     b.Property<int>("RealEstateStatusID")
                         .HasColumnType("int");
