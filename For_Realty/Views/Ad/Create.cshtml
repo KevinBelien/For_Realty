@@ -18,6 +18,8 @@
     <div class="col-md-12 d-flex justify-content-center">
         <form asp-action="Create" asp-controller="Ad" class="d-flex flex-column align-items-center justify-content-center form-create-ad">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Ad.UserAccountID" />
+
             @using (Html.BeginForm())
             {
 
@@ -25,10 +27,10 @@
                     @foreach (var status in Model.StatusList)
                     {
                         @*<label class="radio">
-                                <input name="status" type="radio" asp-for="SelectedStatus" data-bind="@Model.SelectedStatus" checked="@(status.Status == "Te koop" ? true : false)"
-                                       value="@(status.Status)" id="@(status.Status)" />
-                                <span>@status.Status</span>
-                            </label>*@
+                        <input name="status" type="radio" asp-for="SelectedStatus" data-bind="@Model.SelectedStatus" checked="@(status.Status == "Te koop" ? true : false)"
+                               value="@(status.Status)" id="@(status.Status)" />
+                        <span>@status.Status</span>
+                    </label>*@
                         <label class="radio">
                             @Html.RadioButtonFor(model => model.SelectedStatus, status.RealEstateStatusID)
                             <span>@(status.Status == "Te koop" ? "Kopen" : "Huren") </span>
@@ -79,12 +81,12 @@
                             <i>&euro;</i>
                         </div>
                     </div>
-                        <span asp-validation-for="Ad.Price" class="text-danger justify-content-end mt-2"></span>
+                    <span asp-validation-for="Ad.Price" class="text-danger justify-content-end mt-2"></span>
                 </div>
 
                 <div class="form-group form-crit mb-4">
                     <textarea asp-for="Ad.Requirements" rows="6" placeholder="Andere criteria" class="form-control inputbox"></textarea>
-                        <span asp-validation-for="Ad.Requirements" class="text-danger mt-2"></span>
+                    <span asp-validation-for="Ad.Requirements" class="text-danger mt-2"></span>
                 </div>
 
                 <div class="form-group my-2">
