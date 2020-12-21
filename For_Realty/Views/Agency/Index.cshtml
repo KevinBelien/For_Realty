@@ -7,10 +7,10 @@
     <h1>Makelaars</h1>
     <p>Dit zijn alle agentschappen waar wij mee samenwerken</p>
 </div>
-<div class="row">
+<div class="row d-flex flex-row justify-content-center align-content-center">
     @foreach(var agency in Model.AgencyList)
     {
-    <div class="col-md-6 mb-4">
+    <div class="col-lg-6 mb-4 d-flex flex-column justify-content-center align-items-center">
         <partial name="_AgencyDetailPartial" model="agency" />
     </div>
     }

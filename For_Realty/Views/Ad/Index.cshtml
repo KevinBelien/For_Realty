@@ -1,83 +1,56 @@
-﻿@model IEnumerable<For_Realty.Models.Ad>
+﻿@model For_Realty.ViewModels.ListAdViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Zoekertjes";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DateInit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Requirements)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Radius)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserAccount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Town)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RealEstateType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RealEstateSubtype)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RealEstateStatus)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateInit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Requirements)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Radius)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserAccount.Givenname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Town.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RealEstateType.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RealEstateSubtype.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RealEstateStatus.Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AdID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AdID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AdID">Delete</a>
-            </td>
-        </tr>
+<h1 class="my-4 text-center">Mijn zoekertjes</h1>
+@if (Model.Ads.Count() == 0)
+{
+    <div class="row d-flex flex-row justify-content-center align-items-center my-5">
+        <div class="d-flex flex-column">
+            <p class="emp-fav">Je hebt nog geen zoekertje geplaatst!</p>
+            <a asp-controller="Ad" asp-action="Create" class="btn btn-outline btn-custom-outline">Plaats een zoekertje</a>
+        </div>
+        <img src="~/images/gnu-161336_1280.png" class="img-fluid nofav-img" />
+    </div>
 }
-    </tbody>
-</table>
+else
+{
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        <p class="emp-fav mb-5">Je hebt @(Model.Ads.Count())&nbsp;@(Model.Ads.Count() == 1 ? "zoekertje" : "zoekertjes") geplaatst!</p>
+
+        @foreach (var ad in Model.Ads)
+        {
+    <div class="row index-ad-box p-3 mb-5 d-flex flex-column">
+        <div class="d-flex flex-row">
+            <div class="col-6">
+                <h2 class="index-ad-header">@(ad.RealEstateStatus.Status == "Te koop" ? "Kopen" : "Huren")</h2>
+                <p>Op zoek naar: <strong>@(ad.RealEstateType.Name)</strong></p>
+                <p>Zoekgebied: <strong>@(ad.Town.Name)</strong></p>
+                <p>Radius: <strong>@(ad.Radius)km</strong></p>
+                <p>Prijsrange: <strong>&euro; @(ad.Price)</strong></p>
+            </div>
+            <div class="col-6 align-items-start justify-content-start">
+                <p class="mb-1">Andere vereisten:</p>
+                <textarea readonly="readonly" value="@(ad.Requirements)" wrap="hard" rows="6" class="index-ad-req">@(ad.Requirements == null ? "Geen andere criteria" : ad.Requirements)</textarea>
+            </div>
+        </div>
+        <div class="d-flex flex-row align-self-end ad-button-box">
+            <div class="d-flex align-content-end align-items-end justify-content-end">
+
+                <a asp-action="Edit" asp-route-id="@ad.AdID" class="btn btn-primary btn-submit mr-3">Bewerken</a>
+
+                <form asp-action="Delete" asp-controller="Ad" asp-route-id="@(ad.AdID)">
+                    <input type="hidden" asp-for="@(ad.AdID)" />
+                    <input type="submit" value="Verwijderen" class="btn btn-outline-danger font-weight-bold" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+        }
+    </div>
+}
+
+

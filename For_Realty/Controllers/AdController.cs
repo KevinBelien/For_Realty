@@ -10,6 +10,7 @@ using For_Realty.Models;
 using For_Realty.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using For_Realty.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace For_Realty.Controllers
 {
@@ -25,34 +26,19 @@ namespace For_Realty.Controllers
         }
 
         // GET: Ad
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var for_RealtyDbContext = _context.Ads.Include(a => a.RealEstateStatus).Include(a => a.RealEstateSubtype).Include(a => a.RealEstateType).Include(a => a.Town).Include(a => a.UserAccount);
-            return View(await for_RealtyDbContext.ToListAsync());
-        }
+            ListAdViewModel viewModel = new ListAdViewModel();
+            viewModel.User = GetUser();
+            viewModel.Ads = await _context.Ads
+                    .Include(s => s.RealEstateType)
+                    .Include(a => a.Town)
+                    .Include(a => a.RealEstateStatus)
+                    .Include(a => a.UserAccount)
+                .Where(a => a.UserAccountID == viewModel.User.UserAccountID).ToListAsync();
 
-        // GET: Ad/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ad = await _context.Ads
-                .Include(a => a.RealEstateStatus)
-                .Include(a => a.RealEstateSubtype)
-                .Include(a => a.RealEstateType)
-                .Include(a => a.Town)
-                .Include(a => a.UserAccount)
-                .FirstOrDefaultAsync(m => m.AdID == id);
-            if (ad == null)
-            {
-                return NotFound();
-            }
-
-            return View(ad);
+            return View(viewModel);
         }
 
         // GET: Ad/Create
@@ -75,6 +61,7 @@ namespace For_Realty.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(CreateAdViewModel viewModel)
         {
             string accountId = _userManager.GetUserId(HttpContext.User);
@@ -158,37 +145,35 @@ namespace For_Realty.Controllers
         }
 
         // GET: Ad/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ad = await _context.Ads
-                .Include(a => a.RealEstateStatus)
-                .Include(a => a.RealEstateSubtype)
-                .Include(a => a.RealEstateType)
-                .Include(a => a.Town)
-                .Include(a => a.UserAccount)
-                .FirstOrDefaultAsync(m => m.AdID == id);
-            if (ad == null)
-            {
-                return NotFound();
-            }
-
-            return View(ad);
+            return DeleteConfirmed(id);
         }
 
         // POST: Ad/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [Authorize(Roles = "AccountAdmin")]
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
+            if (id  == null)
+            {
+                return NotFound();
+            }
+
             var ad = await _context.Ads.FindAsync(id);
+
+            if (ad == null)
+            {
+                return NotFound();
+
+            }
+
             _context.Ads.Remove(ad);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
+
         }
 
         private bool AdExists(int id)
