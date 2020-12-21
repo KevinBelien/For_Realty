@@ -44,7 +44,7 @@ namespace For_Realty.Controllers
         }
 
         // GET: Favorite/Delete/5
-        public Task<IActionResult> DeleteFavorite(int realEstateID)
+        public Task<IActionResult> DeleteFavorite(int? realEstateID)
         {
             return DeleteFavoriteConfirmed(realEstateID);
         }
@@ -53,8 +53,12 @@ namespace For_Realty.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "AccountAdmin")]
-        public async Task<IActionResult> DeleteFavoriteConfirmed(int realEstateID)
+        public async Task<IActionResult> DeleteFavoriteConfirmed(int? realEstateID)
         {
+            if (realEstateID == null)
+            {
+                return NotFound();
+            }
 
             ListFavoritesViewModel viewModel = new ListFavoritesViewModel();
             viewModel.User = GetUser();
