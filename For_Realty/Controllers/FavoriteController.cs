@@ -56,9 +56,9 @@ namespace For_Realty.Controllers
         public async Task<IActionResult> DeleteFavoriteConfirmed(int realEstateID)
         {
 
-            DetailsRealEstateViewModel viewModel = new DetailsRealEstateViewModel();
-            viewModel.UserAccount = GetUser();
-            var favorite = _context.Favorites.Where(f => f.UserAccountID == viewModel.UserAccount.UserAccountID)
+            ListFavoritesViewModel viewModel = new ListFavoritesViewModel();
+            viewModel.User = GetUser();
+            var favorite = _context.Favorites.Where(f => f.UserAccountID == viewModel.User.UserAccountID)
                 .Where(f => f.RealEstateID == realEstateID).FirstOrDefault();
 
             if (favorite == null)

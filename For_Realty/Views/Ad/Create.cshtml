@@ -1,66 +1,99 @@
-﻿@model For_Realty.Models.Ad
+﻿@model For_Realty.ViewModels.CreateAdViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Plaats een zoekertje";
 }
 
-<h1>Create</h1>
 
-<h4>Ad</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="DateInit" class="control-label"></label>
-                <input asp-for="DateInit" class="form-control" />
-                <span asp-validation-for="DateInit" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Requirements" class="control-label"></label>
-                <input asp-for="Requirements" class="form-control" />
-                <span asp-validation-for="Requirements" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Radius" class="control-label"></label>
-                <input asp-for="Radius" class="form-control" />
-                <span asp-validation-for="Radius" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserAccountID" class="control-label"></label>
-                <select asp-for="UserAccountID" class ="form-control" asp-items="ViewBag.UserAccountID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="TownID" class="control-label"></label>
-                <select asp-for="TownID" class ="form-control" asp-items="ViewBag.TownID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="RealEstateTypeID" class="control-label"></label>
-                <select asp-for="RealEstateTypeID" class ="form-control" asp-items="ViewBag.RealEstateTypeID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="RealEstateSubtypeID" class="control-label"></label>
-                <select asp-for="RealEstateSubtypeID" class ="form-control" asp-items="ViewBag.RealEstateSubtypeID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="RealEstateStatusID" class="control-label"></label>
-                <select asp-for="RealEstateStatusID" class ="form-control" asp-items="ViewBag.RealEstateStatusID"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="d-flex flex-column align-items-center text-center mt-5">
+    <h1 class="mb-2">Plaats een zoekertje!</h1>
+    <p class="mb-0 intro-header-ad">Ben je het moe om elke keer opnieuw een makelaar te bezoeken en hetzelfde verhaal te doen?</p>
+    <p class="intro-text-ad">
+        Plaats hier dan een zoekertje.<br />
+        Dit zoekertje wordt gepubliceerd op een platform waar elke makelaar die met ons samenwerkt toegang tot heeft.<br />
+        Misschien vinden zij wel de woning van je dromen!
+    </p>
 </div>
+<div class="row my-4">
+    <div class="col-md-12 d-flex justify-content-center">
+        <form asp-action="Create" asp-controller="Ad" class="d-flex flex-column align-items-center justify-content-center form-create-ad">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @using (Html.BeginForm())
+            {
 
-<div>
-    <a asp-action="Index">Back to List</a>
+                <div class="form-group mx-0">
+                    @foreach (var status in Model.StatusList)
+                    {
+                        @*<label class="radio">
+                                <input name="status" type="radio" asp-for="SelectedStatus" data-bind="@Model.SelectedStatus" checked="@(status.Status == "Te koop" ? true : false)"
+                                       value="@(status.Status)" id="@(status.Status)" />
+                                <span>@status.Status</span>
+                            </label>*@
+                        <label class="radio">
+                            @Html.RadioButtonFor(model => model.SelectedStatus, status.RealEstateStatusID)
+                            <span>@(status.Status == "Te koop" ? "Kopen" : "Huren") </span>
+                        </label>
+                    }
+
+
+                </div>
+                <div class="form-group mb-4">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <div class="input-group-prepend">
+                            <label asp-for="Ad.TownID" class="control-label mr-3 pt-2">Gemeente: </label>
+                        </div>
+                        <select asp-for="Ad.TownID" asp-items="Model.Towns" class="custom-select form-town"></select>
+                    </div>
+                    <span asp-validation-for="Ad.TownID" class="text-danger mt-2"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <label asp-for="Ad.Radius" class="control-label mr-3 pt-2">Radius: </label>
+                        <div class="input-icon input-icon-right input-rad">
+                            <input asp-for="Ad.Radius" max="999" min="0" onkeyup="if(parseInt(this.value)>999){ this.value =999; return false; }"
+                                   class="form-control text-left pl-2" />
+                            <i>km</i>
+                        </div>
+                    </div>
+                    <span asp-validation-for="Ad.Radius" class="text-danger mt-2"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+
+                        <div class="input-group-prepend">
+                            <label asp-for="Ad.RealEstateTypeID" class="control-label mr-3 pt-2">Type: </label>
+                        </div>
+                        <select asp-for="Ad.RealEstateTypeID" asp-items="Model.Types" class="custom-select inputbox"></select>
+                    </div>
+                    <span asp-validation-for="Ad.RealEstateTypeID" class="text-danger  mt-2"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+
+                        <label asp-for="Ad.Price" class="control-label mr-3 pt-2">Max prijs/huur:</label>
+                        <div class="input-icon">
+                            <input class="form-control form-price inputbox" asp-for="Ad.Price" />
+                            <i>&euro;</i>
+                        </div>
+                    </div>
+                        <span asp-validation-for="Ad.Price" class="text-danger justify-content-end mt-2"></span>
+                </div>
+
+                <div class="form-group form-crit mb-4">
+                    <textarea asp-for="Ad.Requirements" rows="6" placeholder="Andere criteria" class="form-control inputbox"></textarea>
+                        <span asp-validation-for="Ad.Requirements" class="text-danger mt-2"></span>
+                </div>
+
+                <div class="form-group my-2">
+                    <input type="submit" value="Creëer zoekertje" class="btn btn-primary btn-submit" />
+                </div>
+            }
+        </form>
+
+    </div>
 </div>
 
 @section Scripts {
