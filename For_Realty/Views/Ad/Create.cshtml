@@ -15,8 +15,8 @@
     </p>
 </div>
 <div class="row my-4">
-    <div class="col-md-12">
-        <form asp-action="Create" asp-controller="Ad" class="d-flex flex-column align-items-center justify-content-center p-4 form-create-ad">
+    <div class="col-md-12 d-flex justify-content-center">
+        <form asp-action="Create" asp-controller="Ad" class="d-flex flex-column align-items-center justify-content-center form-create-ad">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @using (Html.BeginForm())
             {
@@ -25,58 +25,70 @@
                     @foreach (var status in Model.StatusList)
                     {
                         @*<label class="radio">
-                        <input name="status" type="radio" asp-for="SelectedStatus" data-bind="@Model.SelectedStatus" checked="@(status.Status == "Te koop" ? true : false)"
-                               value="@(status.Status)" id="@(status.Status)" />
-                        <span>@status.Status</span>
-                    </label>*@
+                                <input name="status" type="radio" asp-for="SelectedStatus" data-bind="@Model.SelectedStatus" checked="@(status.Status == "Te koop" ? true : false)"
+                                       value="@(status.Status)" id="@(status.Status)" />
+                                <span>@status.Status</span>
+                            </label>*@
                         <label class="radio">
                             @Html.RadioButtonFor(model => model.SelectedStatus, status.RealEstateStatusID)
-                            <span>@status.Status</span>
+                            <span>@(status.Status == "Te koop" ? "Kopen" : "Huren") </span>
                         </label>
                     }
 
 
                 </div>
-                <div class="form-group d-flex flex-row">
-                    <div class="input-group-prepend">
-                        <label asp-for="Ad.TownID" class="control-label mr-3 pt-2">Gemeente: </label>
+                <div class="form-group mb-4">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <div class="input-group-prepend">
+                            <label asp-for="Ad.TownID" class="control-label mr-3 pt-2">Gemeente: </label>
+                        </div>
+                        <select asp-for="Ad.TownID" asp-items="Model.Towns" class="custom-select form-town"></select>
                     </div>
-                    <select asp-for="Ad.TownID" asp-items="Model.Towns" class="custom-select"></select>
-                    <span asp-validation-for="Ad.TownID" class="text-danger"></span>
+                    <span asp-validation-for="Ad.TownID" class="text-danger mt-2"></span>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group mb-4">
                     <div class="d-flex flex-row justify-content-center align-items-center">
                         <label asp-for="Ad.Radius" class="control-label mr-3 pt-2">Radius: </label>
                         <div class="input-icon input-icon-right input-rad">
                             <input asp-for="Ad.Radius" max="999" min="0" onkeyup="if(parseInt(this.value)>999){ this.value =999; return false; }"
-                                   class="form-control text-left pl-3" />
+                                   class="form-control text-left pl-2" />
                             <i>km</i>
                         </div>
                     </div>
-                    <span asp-validation-for="Ad.Radius" class="text-danger"></span>
+                    <span asp-validation-for="Ad.Radius" class="text-danger mt-2"></span>
                 </div>
-                <div class="form-group d-flex flex-row justify-content-center">
-                    <div class="input-group-prepend">
-                        <label asp-for="Ad.RealEstateTypeID" class="control-label mr-3 pt-2">Type: </label>
+
+                <div class="form-group mb-4">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+
+                        <div class="input-group-prepend">
+                            <label asp-for="Ad.RealEstateTypeID" class="control-label mr-3 pt-2">Type: </label>
+                        </div>
+                        <select asp-for="Ad.RealEstateTypeID" asp-items="Model.Types" class="custom-select inputbox"></select>
                     </div>
-                    <select asp-for="Ad.RealEstateTypeID" asp-items="Model.Types" class="custom-select"></select>
-                    <span asp-validation-for="Ad.RealEstateTypeID" class="text-danger"></span>
+                    <span asp-validation-for="Ad.RealEstateTypeID" class="text-danger  mt-2"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Ad.Price" class="control-label">Max prijs/maandelijkse huur:</label>
-                    <div class="input-icon">
-                        <input asp-for="Ad.Price" class="form-control" />
-                        <i>&euro;</i>
+
+                <div class="form-group mb-4">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+
+                        <label asp-for="Ad.Price" class="control-label mr-3 pt-2">Max prijs/huur:</label>
+                        <div class="input-icon">
+                            <input class="form-control form-price inputbox" asp-for="Ad.Price" />
+                            <i>&euro;</i>
+                        </div>
                     </div>
-                    <span asp-validation-for="Ad.Price" class="text-danger"></span>
+                        <span asp-validation-for="Ad.Price" class="text-danger justify-content-end mt-2"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Ad.Requirements" class="control-label">Andere criteria</label>
-                    <textarea asp-for="Ad.Requirements" rows="6" class="form-control"></textarea>
-                    <span asp-validation-for="Ad.Requirements" class="text-danger"></span>
+
+                <div class="form-group form-crit mb-4">
+                    <textarea asp-for="Ad.Requirements" rows="6" placeholder="Andere criteria" class="form-control inputbox"></textarea>
+                        <span asp-validation-for="Ad.Requirements" class="text-danger mt-2"></span>
                 </div>
-                <div class="form-group">
-                    <input type="submit" value="Creëer zoekertje" class="btn btn-primary" />
+
+                <div class="form-group my-2">
+                    <input type="submit" value="Creëer zoekertje" class="btn btn-primary btn-submit" />
                 </div>
             }
         </form>
