@@ -44,9 +44,11 @@ namespace For_Realty.Controllers
         // GET: Ad/Create
         public async Task<IActionResult> Create()
         {
+            string accountId = _userManager.GetUserId(HttpContext.User);
+
             CreateAdViewModel viewModel = new CreateAdViewModel
             {
-                Ad = new Ad(),
+                Ad = new Ad() { UserAccountID = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault().UserAccountID },
                 StatusList = await _context.RealEstateStatuses.ToListAsync(),
                 Towns = new SelectList(_context.Towns, "TownID", "Name"),
                 Types = new SelectList(_context.RealEstateTypes, "RealEstateTypeID", "Name"),
@@ -64,11 +66,9 @@ namespace For_Realty.Controllers
         [Authorize]
         public async Task<IActionResult> Create(CreateAdViewModel viewModel)
         {
-            string accountId = _userManager.GetUserId(HttpContext.User);
-
+           
             if (ModelState.IsValid)
             {
-                viewModel.Ad.UserAccount = _context.UserAccounts.Where(a => a.UserID == accountId).FirstOrDefault();
                 viewModel.Ad.DateInit = DateTime.Now;
                 //viewModel.Ad.RealEstateStatus = _context.RealEstateStatuses.Where(s => s.RealEstateStatusID == viewModel.SelectedStatusID).FirstOrDefault();
                 viewModel.Ad.RealEstateStatusID = viewModel.SelectedStatus;
@@ -91,17 +91,24 @@ namespace For_Realty.Controllers
                 return NotFound();
             }
 
-            var ad = await _context.Ads.FindAsync(id);
+            Ad ad = await _context.Ads
+                .Include(a => a.RealEstateStatus)
+                .Include(a => a.RealEstateType)
+                .Include(a => a.Town)
+                .SingleOrDefaultAsync(x => x.AdID == id);
             if (ad == null)
             {
                 return NotFound();
             }
-            ViewData["RealEstateStatusID"] = new SelectList(_context.RealEstateStatuses, "RealEstateStatusID", "Status", ad.RealEstateStatusID);
-            ViewData["RealEstateSubtypeID"] = new SelectList(_context.RealEstateSubtypes, "RealEstateSubtypeID", "Name", ad.RealEstateSubtypeID);
-            ViewData["RealEstateTypeID"] = new SelectList(_context.RealEstateTypes, "RealEstateTypeID", "Name", ad.RealEstateTypeID);
-            ViewData["TownID"] = new SelectList(_context.Towns, "TownID", "Name", ad.TownID);
-            ViewData["UserAccountID"] = new SelectList(_context.UserAccounts, "UserAccountID", "Givenname", ad.UserAccountID);
-            return View(ad);
+            EditAdViewModel viewModel = new EditAdViewModel
+            {
+                Ad = ad,
+                SelectedStatus = ad.RealEstateStatus.RealEstateStatusID,
+                StatusList = await _context.RealEstateStatuses.ToListAsync(),
+                Towns = new SelectList(_context.Towns, "TownID", "Name"),
+                Types = new SelectList(_context.RealEstateTypes, "RealEstateTypeID", "Name"),
+            };
+            return View(viewModel);
         }
 
         // POST: Ad/Edit/5
@@ -109,39 +116,26 @@ namespace For_Realty.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AdID,DateInit,Requirements,Price,Radius,UserAccountID,TownID,RealEstateTypeID,RealEstateSubtypeID,RealEstateStatusID")] Ad ad)
+        [Authorize]
+        public async Task<IActionResult> Edit(int id, EditAdViewModel viewModel)
         {
-            if (id != ad.AdID)
+            if (id != viewModel.Ad.AdID)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(ad);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AdExists(ad.AdID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                viewModel.Ad.DateInit = DateTime.Now;
+                //viewModel.Ad.RealEstateStatus = _context.RealEstateStatuses.Where(s => s.RealEstateStatusID == viewModel.SelectedStatusID).FirstOrDefault();
+                viewModel.Ad.RealEstateStatusID = viewModel.SelectedStatus;
+
+                _context.Update(viewModel.Ad);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RealEstateStatusID"] = new SelectList(_context.RealEstateStatuses, "RealEstateStatusID", "Status", ad.RealEstateStatusID);
-            ViewData["RealEstateSubtypeID"] = new SelectList(_context.RealEstateSubtypes, "RealEstateSubtypeID", "Name", ad.RealEstateSubtypeID);
-            ViewData["RealEstateTypeID"] = new SelectList(_context.RealEstateTypes, "RealEstateTypeID", "Name", ad.RealEstateTypeID);
-            ViewData["TownID"] = new SelectList(_context.Towns, "TownID", "Name", ad.TownID);
-            ViewData["UserAccountID"] = new SelectList(_context.UserAccounts, "UserAccountID", "Givenname", ad.UserAccountID);
-            return View(ad);
+            return View(viewModel);
         }
 
         // GET: Ad/Delete/5

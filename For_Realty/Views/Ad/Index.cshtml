@@ -29,7 +29,7 @@ else
                 <p>Op zoek naar: <strong>@(ad.RealEstateType.Name)</strong></p>
                 <p>Zoekgebied: <strong>@(ad.Town.Name)</strong></p>
                 <p>Radius: <strong>@(ad.Radius)km</strong></p>
-                <p>Prijsrange: <strong>&euro; @(ad.Price)</strong></p>
+                <p>Prijsrange: <strong>&euro; @(ad.Price.ToString("N0"))</strong></p>
             </div>
             <div class="col-6 align-items-start justify-content-start">
                 <p class="mb-1">Andere vereisten:</p>
