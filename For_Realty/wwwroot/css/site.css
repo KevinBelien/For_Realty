@@ -135,7 +135,8 @@ h2 {
     background: #F5F5F5;
     color: #000;
     padding: 40px 0px;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
+    width: 800px;
 }
 
 #indexForm .inputbox {
@@ -366,14 +367,17 @@ h2 {
     font-size: 1.6rem;
 }
 
-.card-fav{
+.card-fav,
+.card-search{
     max-width: 700px;
+    height: 205px;
+    overflow:hidden;
 }
 
 
-.card-logo-fav{
-    max-height: 40px;
-    max-width: 40px;
+.card-logo{
+    height: 45px;
+    width: 50px;
 }
 
 .card-img-top {
@@ -476,4 +480,21 @@ h2 {
 .index-ad-req{
     width: 200px;
     left:0;
+}
+
+/*
+    Search
+*/
+.search-main-input{
+    width: 600px;
+}
+.result-subtitle {
+    color: #1E8194;
+    background-color: #fff;
+    font-weight: 600;
+}
+
+.no-result{
+    font-weight: bold;
+    font-size: 1.4rem;
 }

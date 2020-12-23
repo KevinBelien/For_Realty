@@ -27,12 +27,6 @@ namespace For_Realty.Controllers
 
         }
 
-        // GET: RealEstateController
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         // GET: RealEstateController/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -54,10 +48,6 @@ namespace For_Realty.Controllers
                 .FirstOrDefaultAsync(r => r.RealEstateID == id);
 
             viewModel.UserAccount = GetUser();
-
-            //viewModel.EstateSubtype = await _context.RealEstateSubtypes
-            //    .Where(st => st.RealEstateSubtypeID == viewModel.RealEstate.RealEstateType.RealEstateSubtypes)
-            //viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.RealEstate.AgencyID).ToListAsync();
 
             if (viewModel.RealEstate == null)
             {
@@ -107,27 +97,6 @@ namespace For_Realty.Controllers
                 return RedirectToAction(nameof(Details),"RealEstate", new { id = id});
         }
 
-        // GET: RealEstateController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: RealEstateController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         // GET: RealEstateController/Delete/5
         public Task<IActionResult> DeleteFavorite(int realEstateID)
         {
@@ -154,6 +123,33 @@ namespace For_Realty.Controllers
             _context.Favorites.Remove(favorite);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), "RealEstate", new { id = realEstateID });
+        }
+
+        public async Task<IActionResult> Search(ListRealEstateViewModel viewModel)
+        {
+            viewModel.RealEstateStatus = await _context.RealEstateStatuses.ToListAsync();
+
+            IQueryable<RealEstate> queryableEstates = _context.RealEstates.AsQueryable();
+
+            if (viewModel.SelectedStatus != null)
+            {
+                queryableEstates = queryableEstates.Where(e => e.RealEstateStatusID == viewModel.SelectedStatus);
+            }
+            if (!string.IsNullOrEmpty(viewModel.TownSearch))
+            {
+                queryableEstates = queryableEstates.Where(e => e.Town.Name.StartsWith(viewModel.TownSearch) || e.Town.ZIP.StartsWith(viewModel.TownSearch));
+            }
+
+            viewModel.RealEstates = await queryableEstates
+                .Include(e => e.Town)
+                .Include(e => e.RealEstateStatus)
+                .Include(e => e.RealEstateSubtype).ThenInclude(e => e.RealEstateType)
+                .Include(e => e.RealEstatePictures)
+                .Include(e => e.Agency)
+                .ToListAsync();
+
+            return View("Index", viewModel);
+
         }
 
         private UserAccount GetUser()
