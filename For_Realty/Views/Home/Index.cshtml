@@ -3,41 +3,41 @@
 @{ ViewData["Title"] = "Home Page"; }
 
 <h1 class="mt-5 mb-4 text-center">De plek voor aankoop van vastgoed</h1>
-<form id="indexForm" asp-controller="RealEstate" asp-action="Search" method="get">
-    <div class="form-actions no-color searchbox">
-        <div class="d-flex flex-row justify-content-center mb-3">
-            @foreach (var status in Model.RealEstateStatus)
-            {
-                @if (status.RealEstateStatusID == 1)
+<div class="row my-4">
+    <div class="col-md-12 d-flex justify-content-center">
+        @*<form id="indexForm" asp-controller="RealEstate" asp-action="Search" method="get">
+            <div class="form-actions no-color searchbox">
+                @using (Html.BeginForm())
                 {
-                    <label class="radio">
-                        <input name="status" type="radio" asp-for="RealEstateStatus"
-                               value="@status.Status" id="RealEstateStatus@(status.Status)" checked />
-                        <span>@status.Status</span>
-                    </label>
-                }
-                else
-                {
-                    <label class="radio">
-                        <input name="status" type="radio" asp-for="RealEstateStatus"
-                               value="@status.Status" id="RealEstateStatus@(status.Status)" />
-                        <span>@status.Status</span>
-                    </label>
-                }
-            }
-        </div>
-        <div class="input-group d-flex flex-row justify-content-center">
-            <input type="text" placeholder="Zoek op gemeente" asp-for="Town" class="inputbox" />
-            <div class="input-group-append">
-                <input type="submit" asp-controller="Home" asp-action="Index" value="Zoeken" class="btn btn-primary btn-submit" />
-            </div>
-        </div>
-    </div>
-</form>
+                    <div class="d-flex flex-row justify-content-center mb-3">
 
+                        <div class="form-group mx-0">
+                            @foreach (var status in Model.RealEstateStatus)
+                            {
+                                <label class="radio">
+                                    @Html.RadioButtonFor(model => model.SelectedStatus, status.RealEstateStatusID)
+                                    <span>@(status.Status == "Te koop" ? "Kopen" : "Huren") </span>
+                                </label>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="input-group d-flex flex-row justify-content-center">
+                        <input type="text" placeholder="Zoek op gemeente" asp-for="TownSearch" class="inputbox" />
+                        <div class="input-group-append">
+                            <input type="submit" value="Zoeken" class="btn btn-primary btn-submit" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </form>*@
+        <partial name="_SearchbarPartial" model="Model" />
+
+    </div>
+</div>
 <h2 class="mt-5 mb-3 head-title-index text-sm-center text-md-left">Nieuw te koop!</h2>
 
-<div class="row mt-4">
+<div class="row mt-5">
     @foreach (var estate in Model.RealEstatesBuy)
     {
         <div class="col-lg-4 col-md-6 col-12 mb-5 mt-3">
