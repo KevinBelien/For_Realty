@@ -4,7 +4,7 @@
     ViewData["Title"] = "Verlanglijstje";
 }
 
-<h1 class="my-4 text-center">Mijn verlanglijstje</h1>
+<h1 class="mb-4 mt-5 text-center">Mijn verlanglijstje</h1>
 @if (Model.Favorites.Count() == 0)
 {
     <div class="row d-flex flex-row justify-content-center align-items-center my-5">
@@ -18,7 +18,7 @@ else
         <p class="emp-fav mb-3">Je hebt @(Model.Favorites.Count())&nbsp;@(Model.Favorites.Count() == 1 ? "pand" : "panden") opgeslagen in je verlanglijstje!</p>
         @foreach (var favorite in Model.Favorites)
         {
-            <div class="card card-fav mb-4">
+            <div class="card card-fav mb-5">
                 <div class="row no-gutters">
                     <div class="col-md-6">
                         <img src="@(favorite.RealEstate.RealEstatePictures.Where(re => re.Title == "Front").SingleOrDefault().FileName)"
@@ -26,12 +26,12 @@ else
                     </div>
                     <div class="col-md-6">
                         <div class="card-body text-left p-3">
-                            <div class="row pt-0 mb-2 align-items-center">
+                            <div class="row pt-0 mb-3 align-items-center">
                                 <div class="col-6">
                                     <p class="card-title">@(favorite.RealEstate.RealEstateSubtype.RealEstateType.Name)</p>
                                 </div>
                                 <div class="col-6 d-flex justify-content-end">
-                                    <img src="@(favorite.RealEstate.Agency.Logo)" class="card-logo-fav mt-0 pt-0" />
+                                    <img src="@(favorite.RealEstate.Agency.Logo)" class="card-logo mt-0 pt-0" />
                                 </div>
 
                             </div>
@@ -62,7 +62,7 @@ else
                                     <p class="card-text text-right font-weight-bold">&euro; @(favorite.RealEstate.Price.ToString("N0"))&nbsp;</p>
                                 </div>
                             </div>
-                            <div class="row d-flex flex-row mt-4">
+                            <div class="row d-flex flex-row mt-3">
                                 <div class="col-6">
                                     <a asp-controller="RealEstate" asp-action="Details" asp-route-id="@(favorite.RealEstateID)" class="btn btn-primary btn-submit">Bekijken</a>
                                 </div>

@@ -28,10 +28,23 @@ namespace For_Realty.Controllers
         }
 
         // GET: RealEstateController
-        public ActionResult Index()
-        {
-            return View();
-        }
+        //public async Task<IActionResult> Index()
+        //{
+        //    ListRealEstateViewModel viewModel = new ListRealEstateViewModel();
+        //    viewModel.RealEstateStatus = await _context.RealEstateStatuses.ToListAsync();
+
+        //    viewModel.RealEstates = await _context.RealEstates.ToListAsync();
+
+        //    viewModel.LocalDate = TimeZoneInfo.ConvertTime(DateTime.Now,
+        //         TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"));
+
+        //    /*viewModel.ListRealEstatePictures = await _context.RealEstatePictures.Include(rep => rep.RealEstate)
+        //        .Where(rep => rep.Title == "Front")
+        //        .OrderByDescending(rep => rep.RealEstate.DateInit).Take(5)
+        //        .ToListAsync();*/
+
+        //    return View(viewModel);
+        //}
 
         // GET: RealEstateController/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -154,6 +167,33 @@ namespace For_Realty.Controllers
             _context.Favorites.Remove(favorite);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), "RealEstate", new { id = realEstateID });
+        }
+
+        public async Task<IActionResult> Search(ListRealEstateViewModel viewModel)
+        {
+            viewModel.RealEstateStatus = await _context.RealEstateStatuses.ToListAsync();
+
+            IQueryable<RealEstate> queryableEstates = _context.RealEstates.AsQueryable();
+
+            if (viewModel.SelectedStatus != null)
+            {
+                queryableEstates = queryableEstates.Where(e => e.RealEstateStatusID == viewModel.SelectedStatus);
+            }
+            if (!string.IsNullOrEmpty(viewModel.TownSearch))
+            {
+                queryableEstates = queryableEstates.Where(e => e.Town.Name.StartsWith(viewModel.TownSearch) || e.Town.ZIP.StartsWith(viewModel.TownSearch));
+            }
+
+            viewModel.RealEstates = await queryableEstates
+                .Include(e => e.Town)
+                .Include(e => e.RealEstateStatus)
+                .Include(e => e.RealEstateSubtype).ThenInclude(e => e.RealEstateType)
+                .Include(e => e.RealEstatePictures)
+                .Include(e => e.Agency)
+                .ToListAsync();
+
+            return View("Index", viewModel);
+
         }
 
         private UserAccount GetUser()

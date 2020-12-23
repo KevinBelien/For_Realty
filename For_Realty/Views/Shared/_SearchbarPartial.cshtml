@@ -1,0 +1,28 @@
+﻿@model For_Realty.ViewModels.ListRealEstateViewModel
+
+<form id="indexForm" asp-controller="RealEstate" asp-action="Search" method="get">
+    <div class="form-actions no-color searchbox">
+        @using (Html.BeginForm())
+        {
+            <div class="d-flex flex-row justify-content-center mb-3">
+
+                <div class="form-group mx-0">
+                    @foreach (var status in Model.RealEstateStatus)
+                    {
+                        <label class="radio">
+                            @Html.RadioButtonFor(model => model.SelectedStatus, status.RealEstateStatusID)
+                            <span>@(status.Status == "Te koop" ? "Kopen" : "Huren") </span>
+                        </label>
+                    }
+
+                </div>
+            </div>
+            <div class="input-group d-flex flex-row justify-content-center">
+                <input type="text" placeholder="Zoek op gemeente of postcode" asp-for="TownSearch" class="inputbox" required/>
+                <div class="input-group-append">
+                    <input type="submit" value="Zoeken" class="btn btn-primary btn-submit" />
+                </div>
+            </div>
+        }
+    </div>
+</form>

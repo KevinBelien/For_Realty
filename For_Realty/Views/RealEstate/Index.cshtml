@@ -1,0 +1,98 @@
+﻿@model For_Realty.ViewModels.ListRealEstateViewModel
+
+@{
+    ViewData["Title"] = "Zoekresultaten";
+}
+
+
+<div class="row mt-5 mb-3">
+    <div class="col-md-12 d-flex justify-content-center">
+        <partial name="_SearchbarPartial" model="Model" />
+    </div>
+</div>
+
+@if (Model.RealEstates.Count() == 0)
+{
+    <div class="row d-flex h-100">
+        <div class="col-md-12 d-flex flex-column justify-content-center text-center">
+            <p class="no-result mb-1">Er zijn geen zoekresultaten opgedoken!</p>
+            <p class="result-subtitle">Controleer de spelling of probeer een andere zoekterm</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">Zoekresultaten</h1>
+            <p class="text-center result-subtitle">(@(Model.RealEstates.Count()) resultaten)</p>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12 d-flex flex-row justify-content-center align-items-center">
+            <div class="row d-flex flex-column">
+
+                @foreach (var realEstate in Model.RealEstates)
+                {
+                    <div class="card card-search mb-5">
+                        <div class="row no-gutters">
+                            <div class="col-md-6">
+                                <img src="@(realEstate.RealEstatePictures.Where(re => re.Title == "Front").SingleOrDefault().FileName)"
+                                     class="card-img-top card-img-index" alt="picture of estate with code @(realEstate.Code)" />
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card-body text-left p-3">
+                                    <div class="row pt-0 mb-3 align-items-center">
+                                        <div class="col-6">
+                                            <p class="card-title">@(realEstate.RealEstateSubtype.RealEstateType.Name)</p>
+                                        </div>
+                                        <div class="col-6 d-flex justify-content-end">
+                                            <img src="@(realEstate.Agency.Logo)" class="card-logo mt-0 pt-0" />
+                                        </div>
+
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col-6">
+                                            <p class="card-text">@(realEstate.RealEstateStatus.Status)</p>
+                                        </div>
+                                        @if (realEstate.AmountBedrooms != null)
+                                        {
+                                            <div class="col-6">
+                                                <p class="card-text text-right">@(realEstate.AmountBedrooms.ToString())&nbsp;slpk</p>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col-6">
+                                            <p class="card-text">@(realEstate.Town.Name) - @(realEstate.Town.ZIP) </p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="card-text text-right">@(realEstate.AreaSpace.ToString())&nbsp;m²</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col-6">
+                                            <p class="card-text">@(realEstate.Street)&nbsp;@(realEstate.HouseNr)</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="card-text text-right font-weight-bold">&euro; @(realEstate.Price.ToString("N0"))&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3 py-1">
+                                        <div class="col-12">
+                                            <a asp-controller="RealEstate" asp-action="Details" asp-route-id="@(realEstate.RealEstateID)" class="btn btn-primary btn-submit w-100">Bekijken</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+
+

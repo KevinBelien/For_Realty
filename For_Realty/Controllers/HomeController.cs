@@ -54,6 +54,7 @@ namespace For_Realty.Controllers
                 .Where(rep => rep.Title == "Front")
                 .OrderByDescending(rep => rep.RealEstate.DateInit).Take(5)
                 .ToListAsync();*/
+            viewModel.SelectedStatus = 1;
 
             return View(viewModel);
         }
@@ -70,19 +71,9 @@ namespace For_Realty.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(ListRealEstateViewModel viewModel)
+        public IActionResult Search(ListRealEstateViewModel viewModel)
         {
-            if (!string.IsNullOrEmpty(viewModel.Town))
-            {
-                viewModel.RealEstatesBuy = await _context.RealEstates.Include(re => re.Town)
-                    .Where(re => re.Town.Name.Contains(viewModel.Town)).ToListAsync();
-            }
-            else
-            {
-                viewModel.RealEstatesBuy = await _context.RealEstates.Include(re => re.Agency).ToListAsync();
-            }
-
-            return View("Index", viewModel);
+            return RedirectToAction(nameof(Search), "RealEstate", viewModel) ;
         }
     }
 }
