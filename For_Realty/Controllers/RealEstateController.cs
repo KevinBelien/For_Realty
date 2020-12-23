@@ -27,25 +27,6 @@ namespace For_Realty.Controllers
 
         }
 
-        // GET: RealEstateController
-        //public async Task<IActionResult> Index()
-        //{
-        //    ListRealEstateViewModel viewModel = new ListRealEstateViewModel();
-        //    viewModel.RealEstateStatus = await _context.RealEstateStatuses.ToListAsync();
-
-        //    viewModel.RealEstates = await _context.RealEstates.ToListAsync();
-
-        //    viewModel.LocalDate = TimeZoneInfo.ConvertTime(DateTime.Now,
-        //         TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"));
-
-        //    /*viewModel.ListRealEstatePictures = await _context.RealEstatePictures.Include(rep => rep.RealEstate)
-        //        .Where(rep => rep.Title == "Front")
-        //        .OrderByDescending(rep => rep.RealEstate.DateInit).Take(5)
-        //        .ToListAsync();*/
-
-        //    return View(viewModel);
-        //}
-
         // GET: RealEstateController/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -67,10 +48,6 @@ namespace For_Realty.Controllers
                 .FirstOrDefaultAsync(r => r.RealEstateID == id);
 
             viewModel.UserAccount = GetUser();
-
-            //viewModel.EstateSubtype = await _context.RealEstateSubtypes
-            //    .Where(st => st.RealEstateSubtypeID == viewModel.RealEstate.RealEstateType.RealEstateSubtypes)
-            //viewModel.AgencyRealEstates = await _context.RealEstates.Where(re => re.AgencyID == viewModel.RealEstate.AgencyID).ToListAsync();
 
             if (viewModel.RealEstate == null)
             {
@@ -118,27 +95,6 @@ namespace For_Realty.Controllers
                 await _context.SaveChangesAsync();
             }
                 return RedirectToAction(nameof(Details),"RealEstate", new { id = id});
-        }
-
-        // GET: RealEstateController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: RealEstateController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         // GET: RealEstateController/Delete/5
