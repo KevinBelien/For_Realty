@@ -24,14 +24,14 @@
             {
                 if (picture.Index <= 2)
                 {
-                    <figure class="px-1 col-md-3 justify-content-center @(picture.Index == 1 ? "order-2" : "order-0")">
+                    <div class="px-1 col-md-3 justify-content-center @(picture.Index == 1 ? "order-2" : "order-0")">
                         <a href="@(picture.Value.FileName)"
                            data-lightbox="@("RealEstate" + Model.RealEstate.RealEstateID)">
                             <figure><img src="@(picture.Value.FileName)"
                                  alt="subpicture" class="img-fluid sub-img detail-img" />
                     </figure>
                     </a>
-                    </figure>
+                    </div>
                 }
                 else
                 {
