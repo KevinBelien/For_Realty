@@ -35,8 +35,13 @@ namespace For_Realty.Controllers.api
         [HttpGet("{id}")]
         public async Task<ActionResult<Agency>> GetAgency(int id)
         {
-            var agency = await _uow.AgencyRepository.GetById(id);
+            //var agency = await _uow.AgencyRepository.GetById(id);
 
+            var agency = await _uow.AgencyRepository.GetAll()
+                .Where(a => a.AgencyID == id)
+                .Include(a => a.RealEstates)
+                .SingleOrDefaultAsync();
+            
             if (agency == null)
             {
                 return NotFound();
@@ -46,7 +51,6 @@ namespace For_Realty.Controllers.api
         }
 
         // GET: api/Agency/list
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("list")]
         public async Task<ActionResult<IEnumerable<Agency>>> GetAgencyList()
         {
@@ -66,7 +70,7 @@ namespace For_Realty.Controllers.api
                 return BadRequest();
             }
 
-            _uow.AgencyRepository.Create(agency);
+            _uow.AgencyRepository.Update(agency);
             await _uow.Save();
 
             return NoContent();

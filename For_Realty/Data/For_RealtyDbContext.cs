@@ -88,7 +88,6 @@ namespace For_Realty.Data
             builder.Entity<Ad>().ToTable("Ad");
             builder.Entity<Ad>().Property(a => a.DateInit).IsRequired();
             builder.Entity<Ad>().Property(a => a.Price).HasColumnType("decimal(10, 2)").IsRequired();
-            builder.Entity<Ad>().Property(a => a.Radius).IsRequired().HasMaxLength(3);
         }
         private void OnModelCreatingEnergyClass(ModelBuilder builder)
         {

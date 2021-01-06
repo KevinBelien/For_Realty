@@ -18,6 +18,7 @@ using Microsoft.OpenApi.Models;
 using For_Realty.Data.UnitOfWork;
 using For_Realty.Helpers;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
 
 namespace For_Realty
 {
@@ -45,6 +46,7 @@ namespace For_Realty
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
@@ -65,6 +67,7 @@ namespace For_Realty
             });
 
             var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
+
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication()
                 .AddJwtBearer(x =>
@@ -112,6 +115,17 @@ namespace For_Realty
                 });
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3000")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                });
+            });
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -136,6 +150,7 @@ namespace For_Realty
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCors("CorsPolicy");
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
