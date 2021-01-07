@@ -190,21 +190,6 @@ namespace For_Realty
                 // create the roles and seed them to the database.
                 roleResult = await RoleManager.CreateAsync(new IdentityRole("AccountAdmin"));
             }
-            /*// Assign Admin role to the main user.
-            IdentityUser user = Context.Users.FirstOrDefault(u => u.Email == "test@example.com");
-            if (user != null)
-            {
-                DbSet<IdentityUserRole<string>> roles = Context.UserRoles;
-                IdentityRole adminRole = Context.Roles.FirstOrDefault(r => r.Name == "Admin");
-                if (adminRole != null)
-                {
-                    if (!roles.Any(ur => ur.UserId == user.Id && ur.RoleId == adminRole.Id))
-                    {
-                        roles.Add(new IdentityUserRole<string>() { UserId = user.Id, RoleId = adminRole.Id });
-                        Context.SaveChanges();
-                    }
-                }
-            }*/
         }
     }
 }

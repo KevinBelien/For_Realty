@@ -63,14 +63,13 @@ namespace For_Realty.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize (Roles = "AccountAdmin")]
         public async Task<IActionResult> Create(CreateAdViewModel viewModel)
         {
            
             if (ModelState.IsValid)
             {
                 viewModel.Ad.DateInit = DateTime.Now;
-                //viewModel.Ad.RealEstateStatus = _context.RealEstateStatuses.Where(s => s.RealEstateStatusID == viewModel.SelectedStatusID).FirstOrDefault();
                 viewModel.Ad.RealEstateStatusID = viewModel.SelectedStatus;
                 _context.Add(viewModel.Ad);
                 await _context.SaveChangesAsync();
@@ -116,7 +115,7 @@ namespace For_Realty.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "AccountAdmin")]
         public async Task<IActionResult> Edit(int id, EditAdViewModel viewModel)
         {
             if (id != viewModel.Ad.AdID)
@@ -127,7 +126,6 @@ namespace For_Realty.Controllers
             if (ModelState.IsValid)
             {
                 viewModel.Ad.DateInit = DateTime.Now;
-                //viewModel.Ad.RealEstateStatus = _context.RealEstateStatuses.Where(s => s.RealEstateStatusID == viewModel.SelectedStatusID).FirstOrDefault();
                 viewModel.Ad.RealEstateStatusID = viewModel.SelectedStatus;
 
                 _context.Update(viewModel.Ad);

@@ -50,10 +50,6 @@ namespace For_Realty.Controllers
             viewModel.LocalDate = TimeZoneInfo.ConvertTime(DateTime.Now,
                  TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"));
 
-            /*viewModel.ListRealEstatePictures = await _context.RealEstatePictures.Include(rep => rep.RealEstate)
-                .Where(rep => rep.Title == "Front")
-                .OrderByDescending(rep => rep.RealEstate.DateInit).Take(5)
-                .ToListAsync();*/
             viewModel.SelectedStatus = 1;
 
             return View(viewModel);
