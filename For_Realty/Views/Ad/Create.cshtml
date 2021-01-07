@@ -26,11 +26,6 @@
                 <div class="form-group mx-0">
                     @foreach (var status in Model.StatusList)
                     {
-                        @*<label class="radio">
-                        <input name="status" type="radio" asp-for="SelectedStatus" data-bind="@Model.SelectedStatus" checked="@(status.Status == "Te koop" ? true : false)"
-                               value="@(status.Status)" id="@(status.Status)" />
-                        <span>@status.Status</span>
-                    </label>*@
                         <label class="radio">
                             @Html.RadioButtonFor(model => model.SelectedStatus, status.RealEstateStatusID)
                             <span>@(status.Status == "Te koop" ? "Kopen" : "Huren") </span>

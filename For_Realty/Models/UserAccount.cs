@@ -18,11 +18,7 @@ namespace For_Realty.Models
         public string ZIP { get; set; }
         public string Street { get; set; }
         public string HouseNr { get; set; }
-        //public string Mail { get; set; }
-        //public string Password { get; set; }
-        //public string Phone { get; set; }
 
-        //[ForeignKey("AccountUser")]
         public string UserID { get; set; }
         public AccountUser AccountUser { get; set; }
 
